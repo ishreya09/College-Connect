@@ -1,0 +1,29 @@
+User Specification for Campus Connect:
+
+Primary Users:
+- College Students: Both undergraduate and post graduate students from various disciplines.
+- Mentors: Experienced students offering mentorship and guidance.
+
+Project Objectives:
+1. Knowledge Sharing: Facilitate the sharing of educational resources, textbooks, and study materials among students 
+to reduce financial burdens.
+2. Community Engagement: Create a platform for academic discussions, doubt clarification, and access to important 
+college announcements.
+3. Mentorship and Guidance: Connect students with experienced mentors for insightful advice and support in academic and career 
+endeavors.
+4. Exclusive Resources Repository: Provide access to a comprehensive collection of resources, including lecture slides and study 
+aids.
+5. Vital Announcements: Keep students well-informed about college announcements, academic deadlines, and upcoming events.
+
+Key Features:
+- Resource Sharing: Students can share educational materials.
+- Academic Discussions: Platform for doubt clarification and academic discussions.
+- Mentorship: Connect with experienced seniors for guidance.
+- Resource Repository: Access a collection of shared resources.
+- Announcements: Receive timely updates on college announcements and events.
+
+Overall Goal: Build a vibrant online community within the college to address academic challenges and 
+enhance the college experience.
+
+Campus Connect aims to foster a sense of belonging and support among college students while providing 
+valuable resources and mentorship opportunities.
