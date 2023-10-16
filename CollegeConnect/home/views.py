@@ -13,3 +13,15 @@ def contact_us(request):
     context={}
     return render (request,'home/contactus.html',context)
 
+def contact_success(request):
+    context={}
+    return render (request,'home/contactsuccess.html',context)
+
+def about_us(request):
+    context={}
+    return render(request,'home/aboutus.html',context)
+
+def copyright(request):
+    context={}
+    return render(request,'home/copyright.html',context)
+
