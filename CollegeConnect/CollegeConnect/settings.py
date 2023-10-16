@@ -29,9 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-os.path.join(BASE_DIR,'templates')
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,7 +55,7 @@ ROOT_URLCONF = "CollegeConnect.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR,'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -125,7 +122,6 @@ STATICFILES_DIRS=[
     os.path.join(BASE_DIR , 'static/'),
 
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 
 MEDIA_URL ='/media/'
