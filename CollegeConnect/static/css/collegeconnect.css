@@ -49,8 +49,19 @@ body {
     padding: 20px;
 }
 
+p {
+    font-size: x-small;
+    align-items: justify;
+}
+
+h1 {
+    font-size: 40px;
+    padding: 10px; 
+}
+
 .header h1 {
-    font-size: 36px;
+    font-size: 40px;
+    padding: 10px;
 }
 
 /* Defining colors for text and background */
