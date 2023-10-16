@@ -41,9 +41,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     # User Installed Apps
     "home.apps.HomeConfig",
-    
+    "post.apps.PostConfig",
+    "account.apps.AccountConfig",
+    "branch.apps.BranchConfig",
+    "club.apps.ClubConfig",
+    "resource.apps.ResourceConfig",
+    "announcement.apps.AnnouncementConfig",
+
+    # helper apps
+    'taggit',
+
 ]
 
 MIDDLEWARE = [
