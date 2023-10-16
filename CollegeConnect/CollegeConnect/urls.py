@@ -26,6 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # User app urls
     path('', include('home.urls')),
+    path('account/', include('account.urls')),
 
 ]
 
