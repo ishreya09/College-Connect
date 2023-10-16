@@ -25,3 +25,8 @@ def copyright(request):
     context={}
     return render(request,'home/copyright.html',context)
 
+
+def error_404(request):
+    context ={}
+    return render(request, 'home/error404.html',context)
+
