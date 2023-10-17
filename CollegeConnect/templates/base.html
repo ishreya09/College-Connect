@@ -91,6 +91,38 @@
         </ul>
     </nav>
 
+    <br>
+    <br>
+    <br>
+    <br>
+
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'success'%}
+    <div class="alert" style="background-color: green; color: rgb(255, 255, 255);">
+        <span class="close-button" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{message}}
+    </div>
+    {% elif message.tags == 'info'%}
+    <div class="alert" style="background-color: rgb(209, 209, 95); color: black;">
+        <span class="close-button" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{message}}
+    </div>
+    {% elif message.tags == 'warning'%}
+    <div class="alert" style="background-color: rgb(255, 145, 0); color: white;">
+        <span class="close-button" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{message}}
+    </div>
+    {% elif message.tags == 'error'%}
+    <div class="alert" style="background-color: red; color: white;">
+        <span class="close-button" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{message}}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+
     <!-- Block Content -->
     {% block content %}
     <!--enter your html code here-->>
@@ -117,6 +149,9 @@
 
     <!-- Javascript files -->
     <script src="{% static 'js\collegeconnect.js' %}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

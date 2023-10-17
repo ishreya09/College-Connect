@@ -31,6 +31,7 @@ urlpatterns = [
     path('announcement/', include('announcement.urls')),
     path('club/', include('club.urls')),
     path('resource/', include('resource.urls')),
+    path('branch/', include('branch.urls')),
 
 ]
 
