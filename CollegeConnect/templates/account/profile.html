@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -9,8 +11,62 @@
 {% block content %}
 
 <div class="container">
-
-    
+    <h1 class="text-center text-white">My Profile</h1>
+    <br>
+    <br>
+        <div class="card bg-cloudy mb-3 content">
+            <div class = "row">
+                <div class="col-md-3">
+                <h4 class="text-center text-white">Name</h2>    
+                </div>
+                <div class = "col-md-7">
+                <h4 class="text-center text-white" id = "name">John Doe</h2> 
+                </div>   
+            </div>
+            <hr>
+            <div class = "row">
+                <div class="col-md-3">
+                <h4 class="text-center text-white">Role</h2>    
+                </div>
+                <div class = "col-md-7">
+                <h4 class="text-center text-white" id="role">2nd Year</h2> 
+                </div>   
+            </div>
+            <hr>
+            <div class = "row">
+                <div class="col-md-3">
+                <h4 class="text-center text-white">Branch</h2>    
+                </div>
+                <div class = "col-md-7">
+                <h4 class="text-center text-white" id = "branch">Engineering</h2> 
+                </div>   
+            </div>
+            <hr>
+            <div class = "row">
+                <div class="col-md-3">
+                <h4 class="text-center text-white">Department</h2>    
+                </div>
+                <div class = "col-md-7">
+                <h4 class="text-center text-white" id ="department">EEE</h2> 
+                </div>   
+            </div>
+            <hr>
+            <div class = "row">
+                <div class="col-md-3">
+                <h4 class="text-center text-white">Year of Passing</h2>    
+                </div>
+                <div class = "col-md-7">
+                <h4 class="text-center text-white" id = "passingYear">2026</h2> 
+                </div>   
+            </div>
+            <a href="/account/edit_profile">
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                    class="btn btn-success" onclick=return true;>
+                    Edit Profile
+                </button>
+            </a>
+                
+        </div>
 </div>
 
 {% endblock %}

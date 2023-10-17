@@ -2,8 +2,60 @@
 {% block content %}
 	
 <div class="container" >
-
-
-</div>
+   <h1 class="text-center text-white">Edit Profile</h1>
+    <br>
+    <br>
+    <div class="card mb-3 content">
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="text-center text-white">Name</h4>
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="name" value="John Doe">
+                <button class="btn btn-primary edit-button" data-field="name">Edit Name</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="text-center text-white">Role</h4>
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="role" value="2nd Year">
+                <button class="btn btn-primary edit-button" data-field="role">Edit Role</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="text-center text-white">Branch</h4>
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="branch" value="Engineering">
+                <button class="btn btn-primary edit-button" data-field="branch">Edit Branch</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="text-center text-white">Department</h4>
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="department" value="EEE">
+                <button class="btn btn-primary edit-button" data-field="department">Edit Department</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="text-center text-white">Year of Passing</h4>
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="passingYear" value="2026">
+                <button class="btn btn-primary edit-button" data-field="passingYear">Edit Year</button>
+            </div>
+        </div>
+    </div>
+</div>  
 
 {% endblock %}
