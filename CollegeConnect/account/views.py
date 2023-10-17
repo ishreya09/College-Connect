@@ -13,8 +13,7 @@ from .models import Student,Mentor
 
 def register(request):
     department= Department.objects.all()
-    branch= Branch.objects.all()
-    context={'department':department,'branch':branch}
+    context={'department':department}
     return render(request, 'account/register.html',context)
 
 
@@ -50,6 +49,9 @@ def register_submit(request):
             elif (User.objects.filter(email = email).exists()):
                 messages.info (request, "Email already present")
                 return redirect('/account/register')
+            elif (Student.objects.filter(college_email=college_email).exists()):
+                messages.info (request, "Account already present")
+                return redirect('/account/register')
             else:
                 user = User.objects.create_user(first_name= firstname, last_name= lastname ,username= username, password= password1, email= email)
                 user.save()
@@ -67,13 +69,12 @@ def register_submit(request):
                 messages.success(request, 'User Created')
                 return redirect ('/account/login')
         else:
-            messages.info (request, "password does not match")
+            messages.danger (request, "password does not match")
             return redirect('/account/register')
     
     return redirect ('/account/register')
 
     
-
 
 
 

@@ -93,7 +93,7 @@
                     <select class="form-control" id="id_department" name="department">
                         <option class="form-control" disabled selected value="">Department ▼</option>
                         {% for d in department %}
-                        <option class="form-control" value="{{d.department_id}}">{{d.department_name}}</option>
+                        <option class="form-control" value="{{d.department_id}}" > {{d.department_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -144,7 +144,8 @@
                         branchSelect.disabled = false;
                     })
                     .catch(error => console.error(error));
-            } else {
+            } 
+            else {
                 branchSelect.innerHTML = '<option value="" disabled selected>Select Branch</option>';
                 branchSelect.disabled = true;
             }
