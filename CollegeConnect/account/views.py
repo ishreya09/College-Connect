@@ -87,7 +87,6 @@ def login_submit(request):
     if request.method == 'POST':        
         username = request.POST.get('username',False)
         password = request.POST.get('password',False)
-        print(username,password)
         
         user = auth.authenticate(username=username, password= password)
         if user is not None:
@@ -108,8 +107,23 @@ def logout(request):
 
 
 def profile(request):
-    context ={}
-    return render(request, 'account/profile.html',context)
+    username= request.user
+    print(username)
+    if(username!='AnonymousUser'):
+        user= User.objects.get(username=username)
+        student = Student.objects.get(user=user)
+        SRN= student.student_id
+        # print(user.first_name,student)
+        # mentor = Mentor.objects.get(student_id=SRN)
+        context ={
+            'user':user,
+            'student':student,
+            # 'mentor':mentor,
+        }
+        return render(request, 'account/profile.html',context)
+    else:
+        messages.error(request,"Please sign in first")
+        return redirect('/account/login')
 
 def change_password(request):
     context ={}

@@ -9,104 +9,12 @@
 {% block content %}
 
 <div class="container">
+    <h1 > {{user.first_name}} {{user.last_name}} </h1> 
     <div class="row">
-        <div class="col-md-3" style="padding:20px;">
+        <div class="col-md-4" style="padding:20px;">
             <div class="bg-dusky mb-3 content card">
 
                 <div class="row">
-                    <div class="col-md-8">
-                        <h2 class="display-2"> John Doe </h2> 
-
-                    </div>
-                    <div class="col-md-3">
-                        <a href="/account/logout">
-                            <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
-                                class="btn btn-danger">
-                                Logout
-                            </button>
-                        </a>
-                    </div>
-                    
-                </div>
-
-                <div class="row">
-                    <h3> Bio </h3>
-                    <span>
-                        <!-- bio -->
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                        Deleniti laborum nihil consequuntur aliquam quidem molestias non pariatur labore eos quae.
-                        Neque, aspernatur. Ab possimus dignissimos voluptatum ea, rerum quos illo, blanditiis dolores
-                        quia et odio enim, libero perspiciatis omnis. Numquam sapiente voluptate provident id, molestias
-                        magni amet magnam voluptatem vel.
-                    </span>
-                </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <span>SRN</span>
-                    </div>
-                    <div class="col-md-8">
-                        <span>PES1UG22EE580</span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <span>Username</span>
-                    </div>
-                    <div class="col-md-8">
-                        <span> johndoe</span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <span>Branch</span>
-                    </div>
-                    <div class="col-md-8">
-                        <span>Engineering</span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <span>Department</span>
-                    </div>
-                    <div class="col-md-8">
-                        <span>EEE</span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <span>Year of Passing</span>
-                    </div>
-                    <div class="col-md-8">
-                        <span>2026</span>
-                    </div>
-                </div>
-
-                <hr>
-                <div class="row">
-                    <div class="col-md-4">
-                        <span>
-                            <a href="#">
-                                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
-                                    class="btn btn-success">
-                                    Apply for Mentor
-                                </button>
-                            </a>
-                        </span>
-                    </div>
                     <div class="col-md-8">
                         <span>
                             <a href="/account/edit_profile">
@@ -118,6 +26,96 @@
 
                         </span>
                     </div>
+                    <div class="col-md-3">
+                        <a href="/account/logout">
+                            <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                                class="btn btn-danger">
+                                Logout
+                            </button>
+                        </a>
+                    </div>
+                    
+                </div>
+                <hr>
+
+                <div class="row">
+                    <h3> Bio </h3>
+                    <span>
+                        <!-- bio -->
+                        {{student.bio}}
+                    </span>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>SRN</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.student_id}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Username</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span> {{user.username}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Department</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.department}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Branch</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.branch}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Year of Passing</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.year_of_passing_out}}</span>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span>
+                            <a href="#">
+                                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                                    class="btn btn-success">
+                                    Apply for Mentor
+                                </button>
+                            </a>
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        
+                    </div>
                 </div>
 
                 <hr>
@@ -126,13 +124,13 @@
             </div>
         </div>
         <div class="col-md-8">
-            <div class="row">
+            <div class="row card bg-dusky">
                 <h3>Create Post </h3>
 
                 <!--form comes here (rich text editor) -->
 
             </div>
-            <div class="row">
+            <div class="row card bg-dusky">
                 <h3>My Posts </h3>
             </div>
 
