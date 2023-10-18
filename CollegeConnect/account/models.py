@@ -11,7 +11,7 @@ class Student(models.Model):
     bio= models.CharField(max_length=500,null=True, blank= True)
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='student')
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
-    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True, blank=True)
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True, blank=True) # one to many
     college_email = models.EmailField(max_length=500,null=False,blank=False) # ends with @pesu.pes.edu
     whatsapp_number = models.CharField(null=True, blank=True, max_length=15) # for contact
     whatsapp_link=models.CharField(max_length=500,null=True,blank=True) # for connecting with mentors
