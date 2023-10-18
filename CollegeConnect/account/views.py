@@ -58,8 +58,8 @@ def register_submit(request):
 
                 student= Student()
                 student.user=User.objects.get(username=username)
-                student.department= Department.object.get(department_id= department)
-                student.department= Branch.object.get(branch_code= branch)
+                student.department= Department.objects.get(department_id= department)
+                student.branch= Branch.objects.get(branch_code= branch)
 
                 data=("",whatsappnumber,whatsapplink,SRN,college_email,year_of_passing_out)                
                 student.bio,student.whatsapp_number,student.whatsapp_link,student.student_id,student.college_email,student.year_of_passing_out=data
@@ -81,6 +81,31 @@ def register_submit(request):
 def login(request):
     context={}
     return render(request, 'account/login.html',context)
+
+def login_submit(request):
+    context={}
+    if request.method == 'POST':        
+        username = request.POST.get('username',False)
+        password = request.POST.get('password',False)
+        print(username,password)
+        
+        user = auth.authenticate(username=username, password= password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'You are logged in successfully')
+            return redirect('/')
+        else:
+            messages.error(request, 'invalid username or password')
+
+            return redirect ('/account/login')
+    else:
+        pass
+
+def logout(request):
+    auth.logout(request)
+    messages.success(request,"You are logged out")
+    return redirect('/')
+
 
 def profile(request):
     context ={}

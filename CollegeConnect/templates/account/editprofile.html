@@ -1,61 +1,133 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block metatags %}
+<title>Sign Up : College Connect</title>
+
+{% endblock %}
+
 {% block content %}
-	
-<div class="container" >
-   <h1 class="text-center text-white">Edit Profile</h1>
+
+<div class="container">
+
+    <h1 class="text-center">Edit Profile</h1>
     <br>
     <br>
-    <div class="card mb-3 content">
+
+    <form class="text-center bg-dusky" method="post" action="/account/register_submit">
+        {% csrf_token %}
         <div class="row">
-            <div class="col-md-3">
-                <h4 class="text-center text-white">Name</h4>
-            </div>
-            <div class="col-md-7">
-                <input type="text" class="form-control" id="name" value="John Doe">
-                <button class="btn btn-primary edit-button" data-field="name">Edit Name</button>
-            </div>
+
+            <!-- Personal Details -->
+            <div class="col">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="firstname" name="firstname" value="John"
+                        placeholder="First Name" required pattern="^[A-Za-z]+$" title="Only letters are allowed" />
+
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="lastname" name="lastname" value="Doe"
+                        placeholder="Last Name" required pattern="^[A-Za-z]+$" title="Only letters are allowed" />
+
+                </div>
+
+                <div class="form-group">
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col col-md-4">
+                        <input type="text" class="form-control" value="+91" id="countrycode" name="countrycode"
+                            placeholder="Country Code" required />
+                    </div>
+
+                    <div class="col">
+                        <div class="form">
+                            <input type="text" class="form-control" id="phone" value="1234569992" name="phone"
+                                placeholder="Whatsapp Number" required pattern="^\[1-9][0-9]{9}$" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="form-control" id="email" name="email" value="johndoe@gmail.com"
+                        placeholder="Email id" required />
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" id="id_department" value="1" name="department">
+                        <option class="form-control" disabled selected >Department ▼</option>
+                        <!-- {% for d in department %}
+                        <option class="form-control" value="{{d.department_id}}" > {{d.department_name}}</option>
+                        {% endfor %} -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" id="id_branch" value="2" name="branch">
+                        <option class="form-control" disabled selected value="4">Branch ▼</option>
+                    </select>
+                </div>
+
+                <!-- checkbox -->
+                <div class="form-group">
+                    <!-- {% if student.show_number == 1 %} -->
+                    <!-- {% else %} -->
+                    <!-- <input type="checkbox" id="show_number" name="show_number" value="none" /> -->
+                    <!-- {% endif %} -->
+                    <input type="checkbox" id="show_number" name="show_number" value="checked" checked />
+                    <label for="show_number">Show Whatsapp Number</label>
+                </div>
+                
+                
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                class="btn btn-success" onclick=return true;>
+                Update Profile
+            </button>
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <h4 class="text-center text-white">Role</h4>
-            </div>
-            <div class="col-md-7">
-                <input type="text" class="form-control" id="role" value="2nd Year">
-                <button class="btn btn-primary edit-button" data-field="role">Edit Role</button>
-            </div>
+
+
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <h4 class="text-center text-white">Branch</h4>
-            </div>
-            <div class="col-md-7">
-                <input type="text" class="form-control" id="branch" value="Engineering">
-                <button class="btn btn-primary edit-button" data-field="branch">Edit Branch</button>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <h4 class="text-center text-white">Department</h4>
-            </div>
-            <div class="col-md-7">
-                <input type="text" class="form-control" id="department" value="EEE">
-                <button class="btn btn-primary edit-button" data-field="department">Edit Department</button>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <h4 class="text-center text-white">Year of Passing</h4>
-            </div>
-            <div class="col-md-7">
-                <input type="text" class="form-control" id="passingYear" value="2026">
-                <button class="btn btn-primary edit-button" data-field="passingYear">Edit Year</button>
-            </div>
-        </div>
-    </div>
-</div>  
+    </form>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var departmentSelect = document.getElementById("id_department");
+        var branchSelect = document.getElementById("id_branch");
+
+        departmentSelect.addEventListener("change", function () {
+            var departmentName = departmentSelect.value;
+            if (departmentName) {
+                fetch(`http://127.0.0.1:8000/branch/${departmentName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+
+                        branchSelect.innerHTML = '<option value="" disabled selected>Select Branch</option>';
+                        data.branches.forEach(function (value) {
+                            var option = document.createElement("option");
+                            option.value = value.branch_code;
+                            option.text = value.branch_name;
+                            branchSelect.appendChild(option);
+                        });
+
+                        branchSelect.disabled = false;
+                    })
+                    .catch(error => console.error(error));
+            }
+            else {
+                branchSelect.innerHTML = '<option value="" disabled selected>Select Branch</option>';
+                branchSelect.disabled = true;
+            }
+        });
+    });
+</script>
+
 
 {% endblock %}
