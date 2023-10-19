@@ -19,11 +19,17 @@ class Student(models.Model):
     is_mentor= models.BooleanField(default=False)
     show_number=models.BooleanField(default=False) # choice for users to show their chat option
     year_of_passing_out= models.IntegerField(null=True,blank=True)
+    def __str__(self):
+        return self.user.username
+
 
 class Mentor(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE,related_name='mentor')
+    username= models.CharField(max_length=300,blank=False,null=False)
     resume= models.FileField(upload_to='resume/')
     domain= TaggableManager()
     description= models.CharField(max_length=5000,null=True, blank= True)
+    def __str__(self):
+        self.student.user.username
 
 

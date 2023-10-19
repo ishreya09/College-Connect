@@ -108,12 +108,10 @@ def logout(request):
 
 def profile(request):
     username= request.user
-    print(username)
-    if(username!='AnonymousUser'):
+    if(username.__str__() != 'AnonymousUser'):
         user= User.objects.get(username=username)
         student = Student.objects.get(user=user)
         SRN= student.student_id
-        # print(user.first_name,student)
         # mentor = Mentor.objects.get(student_id=SRN)
         context ={
             'user':user,
@@ -124,6 +122,23 @@ def profile(request):
     else:
         messages.error(request,"Please sign in first")
         return redirect('/account/login')
+
+def profile_user(request,username):
+    print(username)
+    if(username.__str__() != 'AnonymousUser'):
+        user= User.objects.get(username=username)
+        student = Student.objects.get(user=user)
+        SRN= student.student_id
+        # mentor = Mentor.objects.get(student_id=SRN)
+        context ={
+            'user':user,
+            'student':student,
+            # 'mentor':mentor,
+        }
+        return render(request, 'account/profile.html',context)
+    else:
+        messages.error(request,"Invalid User")
+        return redirect('/error404')
 
 def change_password(request):
     context ={}
