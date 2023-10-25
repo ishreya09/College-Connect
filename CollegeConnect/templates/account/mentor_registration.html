@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metatags %}
+<title>Mentor Registration : College Connect</title>
+
+{% endblock %}
+
+{% block content %}
+
+<div class ="container" >
+    <h1 class="text-center">Apply Now!!!</h1>
+    <br>
+    <br>
+
+    <form class="text-center bg-dusky" method="post" action="account/mentor_registration.html">
+        {% csrf_token %}
+        <div class="row">
+            
+            <div class="col">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" name="username" value="User1"
+                        placeholder="Username" required pattern="^[A-Za-z0-9]+$" title="letters and numbers are allowed" />
+
+                </div>
+
+                <div class="form-group">
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group col col-md-4">
+                        <label for="fileUpload">Uoplaod your Resume:</label>
+                        <input type="file" class="form-control-file" id="fileUpload" name="fileUpload" accept=".pdf" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="domains">Enter Domains:</label>
+                    <input type="text" name="domains" id="domains" placeholder="domain1,domain2" required>
+                </div>
+
+                <div class=""form-group>
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="5" cols="50" maxlength="5000"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>  
+
+</div>
+
+{% endblock %}
