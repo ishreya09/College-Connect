@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import *
+from taggit.models import Tag 
 
 class StudentAdmin(admin.ModelAdmin):
     list_display=(
@@ -50,7 +51,7 @@ class MentorAdmin(admin.ModelAdmin):
         'student',
         'username',
         'approved',
-        'domain'
+        'list_domains',
     )
     search_fields=[
         'student',
@@ -63,9 +64,17 @@ class MentorAdmin(admin.ModelAdmin):
     ]
     list_filter=[
         'domain',
-        'approved'
+        'approved',
         
     ]
+
+    def list_domains(self, obj):
+        # Retrieve the list of domain tags for the mentor and return them as a string
+        domain_tags = obj.domain.all()  # Assuming 'domain' is the name of the TaggableManager field
+        return ', '.join(tag.name for tag in domain_tags)
+
+    list_domains.short_description = "Domains"  # Set a custom column header for the domains
+
 
 
 admin.site.register(Student,StudentAdmin)
