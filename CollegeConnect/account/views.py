@@ -138,7 +138,7 @@ def profile_user(request,username):
             'student':student,
             # 'mentor':mentor,
         }
-        return render(request, 'account/profile.html',context)
+        return render(request, 'account/profile_detail.html',context)
     else:
         messages.error(request,"Invalid User")
         return redirect('/error404')
@@ -167,6 +167,8 @@ def edit_profile_submit(request):
         username = request.user.__str__()
         first_name = request.POST.get('firstname',False)
         last_name = request.POST.get('lastname',False)
+        bio=request.POST.get('bio',False)
+        show_number= request.POST.get('show_number',False)
         country_code= request.POST.get('countrycode',False)
         whatsappnumber = request.POST.get('phone',False)
         email = request.POST.get('email',False)
@@ -185,6 +187,11 @@ def edit_profile_submit(request):
         # generate whatsapp link
         whatsapplink="https://api.whatsapp.com/send?phone="+whatsappnumber
 
+        if(show_number):
+            show_number=True
+        else:
+            show_number=False
+
         # find user and update
         user = User.objects.get(username=username)
         user.first_name=first_name
@@ -195,6 +202,8 @@ def edit_profile_submit(request):
         # find student and update
         student= Student.objects.get(user=user)
         student.department= Department.objects.get(department_id= department)
+        student.bio=bio
+        student.show_number= show_number
         student.branch= Branch.objects.get(branch_code= branch)
         student.whatsapp_number= whatsappno
         student.whatsapp_link=whatsapplink
@@ -208,12 +217,12 @@ def edit_profile_submit(request):
     
 
 def mentor_registration(request):
+    username=request.user.__str__()
+    if(username=="AnonymousUser"):
+        messages.error(request,"Please sign in first")
+        return redirect("/account/mentor_registration")
     if request.method == "POST":
-        username=request.user.__str__()
 
-        if(username=="AnonymousUser"):
-            messages.error(request,"Please sign in first")
-            return redirect("/account/mentor_registration")
         print(request.FILES)
         
         if  'fileupload' in request.FILES:
@@ -222,9 +231,13 @@ def mentor_registration(request):
             domain_list = domains_input.split(",")  # Assuming domains are comma-
             user=User.objects.get(username=username)
             student = Student.objects.get(user=user)
-            mentor = Mentor()
+            if (Mentor.objects.filter(username=username).exists()):
+                mentor=Mentor.objects.get(username=username)
+            else:
+                mentor = Mentor()
             mentor.student=student
             mentor.username=username
+            mentor.approved=0
             mentor.resume = resume
             mentor.description = request.POST.get("description")
             mentor.save()
@@ -237,4 +250,6 @@ def mentor_registration(request):
             return redirect('/account/mentor_registration')
         
     context={}
+    if Mentor.objects.filter(username=username).exists():
+        context['mentor']=Mentor.objects.get(username=username)
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request

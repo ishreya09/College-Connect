@@ -12,7 +12,14 @@
     <h1 class="text-center">Apply Now for Mentor!!!</h1>
     <br>
     <br>
-
+   
+    {% if mentor and mentor.approved %}
+    <p class="text-center h4 text-success">Application Approved</p>
+    {% elif mentor and not mentor.approved %}
+    <p class="text-center h4 text-warning">Application Pending</p>
+    {% else %}
+    <p class="text-center h4 text-primary">Happy to see you here</p>
+    {% endif %}
     <form class="text-center bg-dusky" method="post" action="/account/mentor_registration" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
@@ -23,24 +30,28 @@
 
                 </div>
 
-                <div class="row text-large">
+                <div class="row">
                     <div class="form-group-file col col-md-5">
-                        <label class="text-large" for="fileupload">Uplaod your Resume:</label>
-                        <input type="file" class="form-control-file" id="fileupload" name="fileupload" accept=".pdf"
-                            required />
+                        <label class="h3" for="fileupload">Upload your Resume : </label>
+                        <input type="file" class="form-control-file h3" id="fileupload" name="fileupload" accept=".pdf"
+                        required />
                     </div>
                 </div>
+                
+                {% if mentor.resume %}
+                <a href="{{mentor.resume.url}}" target="_blank" class="h3">View Resume</a>
+                {% endif %}
 
                 <div class="form-group">
-                    <label for="domains">Enter Domains:</label>
+                    <label for="domains">Domains Interested :</label>
                     <input type="text" name="domains" id="domains"
-                        placeholder="domain1,domain2 (Add comma seperated domains)" class="form-control" required>
+                        placeholder="domain1,domain2 (Add comma seperated domains)" value="{{mentor.list_domains}}" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="10" class="form-control"
-                        maxlength="5000"></textarea>
+                    <label for="description">Write About Yourself :</label>
+                    <textarea id="description" name="description"  rows="10" class="form-control"
+                        maxlength="5000">{{mentor.description}}</textarea>
                 </div>
                 <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
                     class="btn btn-success" onclick=return true;>

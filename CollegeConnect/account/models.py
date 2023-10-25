@@ -31,4 +31,10 @@ class Mentor(models.Model):
     description= models.CharField(max_length=5000,null=True, blank= True)
     approved= models.BooleanField(default=False)
 
+    # write list domains function which returns a string
+    def list_domains(self):
+        return ", ".join([p.name for p in self.domain.all()])
+    
+
+
 
