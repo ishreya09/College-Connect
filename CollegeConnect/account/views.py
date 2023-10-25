@@ -215,5 +215,5 @@ def mentor_registration(request):
         # You can now map the domains to the TaggableManager for your model
         mentor_registration = Mentor.objects.create()
         mentor_registration.domains.add(*domain_list)
-        return redirect('/')  # Redirect to a success page or any desired location
-    return render(request, '/account/mentor_registration',context)  # Render the form again if it's a GET request
+        return redirect('/account/profile')  # Redirect to a success page or any desired location
+    return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request

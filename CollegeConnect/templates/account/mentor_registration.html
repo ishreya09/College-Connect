@@ -8,51 +8,47 @@
 
 {% block content %}
 
-<div class ="container" >
-    <h1 class="text-center">Apply Now!!!</h1>
+<div class="container">
+    <h1 class="text-center">Apply Now for Mentor!!!</h1>
     <br>
     <br>
 
-    <form class="text-center bg-dusky" method="post" action="account/mentor_registration.html">
+    <form class="text-center bg-dusky" method="post" action="account/mentor_registration">
         {% csrf_token %}
         <div class="row">
-            
+
             <div class="col">
-
-                <div class="form-control">
-                    <input type="text" class="form-control" id="username" name="username" value="User1"
-                        placeholder="Username" required pattern="^[A-Za-z0-9]+$" title="letters and numbers are allowed" />
-
-                </div>
 
                 <div class="form-group">
 
                 </div>
 
-                <div class="row">
-                    <div class="form-control-file col col-md-4">
-                        <label for="fileUpload">Uoplaod your Resume:</label>
-                        <input type="file" class="form-control-file" id="fileUpload" name="fileUpload" accept=".pdf" required />
+                <div class="row text-large">
+                    <div class="form-group-file col col-md-5">
+                        <label class="text-large" for="fileupload">Uplaod your Resume:</label>
+                        <input type="file" class="form-control-file" id="fileupload" name="fileupload" accept=".pdf"
+                            required />
                     </div>
                 </div>
 
-                <div class="form-control">
+                <div class="form-group">
                     <label for="domains">Enter Domains:</label>
-                    <input type="text" name="domains" id="domains" placeholder="domain1,domain2" required>
+                    <input type="text" name="domains" id="domains"
+                        placeholder="domain1,domain2 (Add comma seperated domains)" class="form-control" required>
                 </div>
 
-                <div class="form-control">
+                <div class="form-group">
                     <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="5" cols="50" maxlength="5000"></textarea>
+                    <textarea id="description" name="description" rows="10" class="form-control"
+                        maxlength="5000"></textarea>
                 </div>
-
                 <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
                     class="btn btn-success" onclick=return true;>
-                    Update Profile
+                    Apply for Mentorship
                 </button>
             </div>
         </div>
-    </form>  
+    </form>
 
 </div>
 

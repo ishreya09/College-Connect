@@ -59,6 +59,10 @@ h1 {
     padding: 10px; 
 }
 
+label{
+    font-size: 25px; 
+}
+
 .header h1 {
     font-size: 40px;
     padding: 10px;
@@ -100,6 +104,10 @@ h1 {
 /* .text-offwhite - Offwhite text color (#ccc) */
 .text-offwhite {
     color:#ccc;
+}
+
+.text-large {
+    font-size: 60px; 
 }
 
 
