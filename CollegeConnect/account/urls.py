@@ -10,7 +10,9 @@ urlpatterns= [
     path('profile',views.profile,name="profile"),
     path('profile/<username>',views.profile_user,name="profile_user"),
     path('edit_profile',views.edit_profile,name="edit_profile"),
+    path('edit_profile_submit',views.edit_profile_submit,name="edit_profile_submit"),
     path('change_password',views.change_password,name="change_password"),
+    path('mentor_registration',views.mentor_registration,name='mentor_registration'),
 
 ]
 

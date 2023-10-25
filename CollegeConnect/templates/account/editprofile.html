@@ -14,7 +14,7 @@
     <br>
     <br>
 
-    <form class="text-center bg-dusky" method="post" action="/account/register_submit">
+    <form class="text-center bg-dusky" method="post" action="/account/edit_profile_submit">
         {% csrf_token %}
         <div class="row">
 
@@ -22,13 +22,13 @@
             <div class="col">
 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="firstname" name="firstname" value="John"
+                    <input type="text" class="form-control" id="firstname" name="firstname" value="{{user.first_name}}"
                         placeholder="First Name" required pattern="^[A-Za-z]+$" title="Only letters are allowed" />
 
                 </div>
 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="lastname" name="lastname" value="Doe"
+                    <input type="text" class="form-control" id="lastname" name="lastname" value="{{user.last_name}}"
                         placeholder="Last Name" required pattern="^[A-Za-z]+$" title="Only letters are allowed" />
 
                 </div>
@@ -40,55 +40,66 @@
                 <div class="row">
 
                     <div class="form-group col col-md-4">
-                        <input type="text" class="form-control" value="+91" id="countrycode" name="countrycode"
-                            placeholder="Country Code" required />
+                        <input type="text" class="form-control" value="{{student.whatsapp_number.split.0}}"
+                            id="countrycode" name="countrycode" placeholder="Country Code" required />
                     </div>
 
                     <div class="col">
                         <div class="form">
-                            <input type="text" class="form-control" id="phone" value="1234569992" name="phone"
-                                placeholder="Whatsapp Number" required pattern="^\[1-9][0-9]{9}$" />
+                            <input type="text" class="form-control" id="phone"
+                                value="{{student.whatsapp_number.split.1}}" name="phone" placeholder="Whatsapp Number"
+                                required pattern="^\[1-9][0-9]{9}$" />
                         </div>
                     </div>
 
                 </div>
 
                 <div class="form-group">
-                    <input type="email" class="form-control" id="email" name="email" value="johndoe@gmail.com"
+                    <input type="email" class="form-control" id="email" name="email" value="{{user.email}}"
                         placeholder="Email id" required />
                 </div>
 
                 <div class="form-group">
-                    <select class="form-control" id="id_department" value="1" name="department">
-                        <option class="form-control" disabled selected >Department ▼</option>
-                        <!-- {% for d in department %}
-                        <option class="form-control" value="{{d.department_id}}" > {{d.department_name}}</option>
-                        {% endfor %} -->
+                    <select class="form-control" id="id_department" name="department">
+                        {% for d in department %}
+                        {% if d.department_name == student.department %}
+                        <option class="form-control" value="{{d.department_id }}" selected>{{student.department}}
+                        </option>
+                        {% else %}
+                        <option class="form-control" value="{{d.department_id}}"> {{d.department_name}}</option>
+                        {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <select class="form-control" id="id_branch" value="2" name="branch">
-                        <option class="form-control" disabled selected value="4">Branch ▼</option>
+                    <select class="form-control" id="id_branch" name="branch">
+                        {% for b in branch %}
+                        {% if b.branch_code == student.branch.branch_code %}
+                        <option class="form-control" selected value="{{student.branch.branch_code}}">{{student.branch}}</option>
+                        {% else %}
+                        <option class="form-control" value="{{b.branch_code}}"> {{b.branch_name}}</option>
+                        {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
 
                 <!-- checkbox -->
                 <div class="form-group">
-                    <!-- {% if student.show_number == 1 %} -->
-                    <!-- {% else %} -->
-                    <!-- <input type="checkbox" id="show_number" name="show_number" value="none" /> -->
-                    <!-- {% endif %} -->
+                    {% if student.show_number == 1 %}
                     <input type="checkbox" id="show_number" name="show_number" value="checked" checked />
+                    {% else %}
+                    <input type="checkbox" id="show_number" name="show_number" value="none" />
+                    {% endif %}
                     <label for="show_number">Show Whatsapp Number</label>
                 </div>
-                
-                
+
+
                 <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
-                class="btn btn-success" onclick=return true;>
-                Update Profile
-            </button>
-        </div>
+                    class="btn btn-success" onclick=return true;>
+                    Update Profile
+                </button>
+            </div>
 
 
         </div>

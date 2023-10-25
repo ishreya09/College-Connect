@@ -34,11 +34,14 @@ def register_submit(request):
         branch = request.POST.get('branch',False)
         department = request.POST.get('department',False)
 
+        whatsappno =country_code+" "+whatsappnumber
+
         # trim + from country code if any
         if (country_code[0] == "+"):
             country_code = country_code[1:]
         
-        whatsappnumber =country_code+whatsappnumber
+        whatsappnumber=country_code+whatsappnumber
+        
 
         whatsapplink="https://api.whatsapp.com/send?phone="+whatsappnumber
 
@@ -61,7 +64,7 @@ def register_submit(request):
                 student.department= Department.objects.get(department_id= department)
                 student.branch= Branch.objects.get(branch_code= branch)
 
-                data=("",whatsappnumber,whatsapplink,SRN,college_email,year_of_passing_out)                
+                data=("",whatsappno,whatsapplink,SRN,college_email,year_of_passing_out)                
                 student.bio,student.whatsapp_number,student.whatsapp_link,student.student_id,student.college_email,student.year_of_passing_out=data
 
                 student.save()
@@ -147,30 +150,62 @@ def change_password(request):
 def edit_profile(request):
     username= request.user
     if(username.__str__() != 'AnonymousUser'):
-
-        context ={}
+        department=Department.objects.all()
+        user= User.objects.get(username=username)
+        student= Student.objects.get(user=user)
+        branch=Branch.objects.filter(department=student.department)
+        print(branch)
+        print(student.branch.branch_code)
+        context ={'department':department,'user':user,'student':student,'branch':branch}
         return render(request, 'account/editprofile.html',context)
     else:
         messages.error(request,"Please sign in first")
         return redirect('/account/login')
-    
-def mentor_registration(request):
-    context={}
-    return render(request,'account/mentor_registration.html',context)
 
 def edit_profile_submit(request):
     if request.method == 'POST':        
         username = request.user.__str__()
-        password = request.POST.get('password',False)
-        
-        user = auth.authenticate(username=username, password= password)
-        if user is not None:
-            auth.login(request, user)
-            messages.success(request, 'You are logged in successfully')
-            return redirect('/')
-        else:
-            messages.error(request, 'invalid username or password')
+        first_name = request.POST.get('firstname',False)
+        last_name = request.POST.get('lastname',False)
+        country_code= request.POST.get('countrycode',False)
+        whatsappnumber = request.POST.get('phone',False)
+        email = request.POST.get('email',False)
 
-            return redirect ('/account/login')
+        branch = request.POST.get('branch',False)
+        department = request.POST.get('department',False)
+
+        whatsappno =country_code+" "+whatsappnumber
+
+        # trim + from country code if any
+        if (country_code[0] == "+"):
+            country_code = country_code[1:]
+        
+        whatsappnumber=country_code+whatsappnumber
+        
+        # generate whatsapp link
+        whatsapplink="https://api.whatsapp.com/send?phone="+whatsappnumber
+
+        # find user and update
+        user = User.objects.get(username=username)
+        user.first_name=first_name
+        user.last_name=last_name
+        user.email=email
+        user.save()
+
+        # find student and update
+        student= Student.objects.get(user=user)
+        student.department= Department.objects.get(department_id= department)
+        student.branch= Branch.objects.get(branch_code= branch)
+        student.whatsapp_number= whatsappno
+        student.whatsapp_link=whatsapplink
+        student.save()  
+
+        messages.success(request,"Profile Updated")
+        return redirect('/account/profile')     
+        
     else:
         pass
+    
+def mentor_registration(request):
+    context={}
+    return render(request,'account/mentor_registration.html',context)
