@@ -208,12 +208,33 @@ def edit_profile_submit(request):
     
 
 def mentor_registration(request):
-    context={}
     if request.method == "POST":
-        domains_input = request.POST.get("domains")
-        domain_list = domains_input.split(",")  # Assuming domains are comma-separated
-        # You can now map the domains to the TaggableManager for your model
-        mentor_registration = Mentor.objects.create()
-        mentor_registration.domains.add(*domain_list)
-        return redirect('/account/profile')  # Redirect to a success page or any desired location
+        username=request.user.__str__()
+
+        if(username=="AnonymousUser"):
+            messages.error(request,"Please sign in first")
+            return redirect("/account/mentor_registration")
+        print(request.FILES)
+        
+        if  'fileupload' in request.FILES:
+            resume = request.FILES['fileupload']
+            domains_input = request.POST.get("domains")
+            domain_list = domains_input.split(",")  # Assuming domains are comma-
+            user=User.objects.get(username=username)
+            student = Student.objects.get(user=user)
+            mentor = Mentor()
+            mentor.student=student
+            mentor.username=username
+            mentor.resume = resume
+            mentor.description = request.POST.get("description")
+            mentor.save()
+            mentor.domain.add(*domain_list)
+            messages.success(request,"Role for mentor successfully applied!, We will get back to you in 1 week")
+            return redirect('/account/profile')  # Redirect to a success page or any desired location
+        
+        else:
+            messages.error(request,"Add your resume first!")
+            return redirect('/account/mentor_registration')
+        
+    context={}
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request

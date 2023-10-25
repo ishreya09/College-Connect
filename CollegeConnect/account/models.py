@@ -30,7 +30,5 @@ class Mentor(models.Model):
     domain= TaggableManager()
     description= models.CharField(max_length=5000,null=True, blank= True)
     approved= models.BooleanField(default=False)
-    def __str__(self):
-        self.student.user.username
 
 

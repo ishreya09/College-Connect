@@ -45,5 +45,28 @@ class StudentAdmin(admin.ModelAdmin):
     ]
 
 
+class MentorAdmin(admin.ModelAdmin):
+    list_display=(
+        'student',
+        'username',
+        'approved',
+        'domain'
+    )
+    search_fields=[
+        'student',
+        'username',
+        'approved',
+        'domain'
+    ]
+    list_editable= [
+        'approved'
+    ]
+    list_filter=[
+        'domain',
+        'approved'
+        
+    ]
+
+
 admin.site.register(Student,StudentAdmin)
-admin.site.register(Mentor)
+admin.site.register(Mentor,MentorAdmin)
