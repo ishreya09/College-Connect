@@ -145,5 +145,32 @@ def change_password(request):
     return render(request, 'account/change_password.html',context)
 
 def edit_profile(request):
-    context ={}
-    return render(request, 'account/editprofile.html',context)
+    username= request.user
+    if(username.__str__() != 'AnonymousUser'):
+
+        context ={}
+        return render(request, 'account/editprofile.html',context)
+    else:
+        messages.error(request,"Please sign in first")
+        return redirect('/account/login')
+    
+def mentor_registration(request):
+    context={}
+    return render(request,'account/mentor_registration.html',context)
+
+def edit_profile_submit(request):
+    if request.method == 'POST':        
+        username = request.user.__str__()
+        password = request.POST.get('password',False)
+        
+        user = auth.authenticate(username=username, password= password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'You are logged in successfully')
+            return redirect('/')
+        else:
+            messages.error(request, 'invalid username or password')
+
+            return redirect ('/account/login')
+    else:
+        pass
