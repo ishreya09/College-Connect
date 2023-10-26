@@ -25,7 +25,7 @@ class Post(models.Model):
     title = models.CharField(max_length=500)
     slug = models.SlugField(unique=True)
     content= RichTextUploadingField(blank=True,null=True)
-    author= models.CharField(max_length=500,default="anonymous")
+    author= models.CharField(max_length=500,default="Anonymous")
     published_date= models.DateField(auto_now_add=True,blank=True,null=True)
     branch = models.ForeignKey(Branch,on_delete=models.CASCADE,verbose_name='branches')
     tags=TaggableManager()

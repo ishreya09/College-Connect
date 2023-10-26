@@ -79,3 +79,5 @@ class MentorAdmin(admin.ModelAdmin):
 
 admin.site.register(Student,StudentAdmin)
 admin.site.register(Mentor,MentorAdmin)
+admin.site.register(Club)
+admin.site.register(ClubMember)
