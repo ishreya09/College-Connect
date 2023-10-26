@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "post.apps.PostConfig",
     "account.apps.AccountConfig",
     "branch.apps.BranchConfig",
-    "club.apps.ClubConfig",
     "resource.apps.ResourceConfig",
     "announcement.apps.AnnouncementConfig",
 
