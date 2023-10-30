@@ -9,6 +9,19 @@ from django.contrib.auth.models import auth
 from branch.models import Department, Branch
 from .models import Student,Mentor
 
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from account.tokens import account_activation_token
+from django.core.mail import send_mail  
+from django.contrib.auth.models import User
+# from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
+from django.views.generic import View
+
+
 # Create your views here.
 
 def register(request):
@@ -69,7 +82,7 @@ def register_submit(request):
 
                 student.save()
                 
-                messages.success(request, 'User Created')
+                messages.success(request, 'Verify Your Account now!!')
                 return redirect ('/account/login')
         else:
             messages.danger (request, "password does not match")
@@ -95,7 +108,7 @@ def login_submit(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'You are logged in successfully')
-            return redirect('/')
+            return redirect('/account/profile')
         else:
             messages.error(request, 'invalid username or password')
 
@@ -253,3 +266,48 @@ def mentor_registration(request):
     if Mentor.objects.filter(username=username).exists():
         context['mentor']=Mentor.objects.get(username=username)
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
+
+
+
+def confirm_email(request):
+    user=request.user
+    current_site = get_current_site(request)
+    subject = 'Activate Your College Connect Account'
+    print(user)
+    message = render_to_string('account/account_activation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+    user.email_user(subject, message)
+
+    messages.success(request, ('Your email confirmation is pending! Verify now'))
+    return redirect('/')
+
+
+class ActivateAccount(View):
+
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            # uid = force_text(urlsafe_base64_decode(uidb64))
+            uid=str(urlsafe_base64_decode(uidb64), 'utf-8')
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.student.email_confirmed = True
+            student=Student.objects.get(user=user)
+            student.email_confirmed=True
+            student.save()
+            user.save()
+            auth.login(request, user)
+            messages.success(request, ('Your email has been confirmed.'))
+            return redirect('/')
+        else:
+            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+            return redirect('/')
+
+        

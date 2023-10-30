@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
+
+from django.contrib import messages
+
 from .models import ContactUs
 # Create your views here.
 def home(request):

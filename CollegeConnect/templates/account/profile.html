@@ -13,6 +13,20 @@
     <div class="row">
         <!-- User details -->
         <div class="col-md-4" style="padding:20px;">
+            {% if not student.email_confirmed %}
+            <a href="/account/confirm_email">
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                    class="btn btn-danger">
+                    Verify Email
+                </button>
+            </a>
+            {% endif %} 
+            <a href="/account/change-password">
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                    class="btn btn-danger">
+                    Change Password
+                </button>
+            </a>
             <div class="bg-dusky mb-3 content">
                 <div class="row">
                     <div class="col-md-6">
