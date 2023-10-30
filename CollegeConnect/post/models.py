@@ -29,9 +29,7 @@ class Post(models.Model):
     published_date= models.DateField(auto_now_add=True,blank=True,null=True)
     branch = models.ForeignKey(Branch,on_delete=models.CASCADE,verbose_name='branches')
     tags=TaggableManager()
-    created_at=models.DateTimeField(auto_now_add=True)
-    featured_img= models.ImageField(blank=True,null=True,upload_to='post/')
-    
+    created_at=models.DateTimeField(auto_now_add=True)    
     def __str__(self):
         return self.title
 

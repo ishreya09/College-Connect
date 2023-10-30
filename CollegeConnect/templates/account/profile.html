@@ -42,7 +42,7 @@
                     <h3> Bio </h3>
                     <span>
                         <!-- bio -->
-                        {{student.bio}}   
+                        {{student.bio}}
                     </span>
                 </div>
                 <hr>
@@ -149,13 +149,31 @@
         <!-- User Posts -->
         <div class="col-md-8">
             <div class="row bg-dusky">
-                <h3>Create Post </h3>
+                <!-- <h3>Create Post </h3> -->
+                <a>
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                    class="btn btn-success">Create Post</button>
+                </a>
 
                 <!--form comes here (rich text editor) -->
 
             </div>
             <div class="row bg-dusky">
-                <h3>My Posts </h3>
+                <h1>My Posts </h1>
+                <div class="card">
+                    <div class="bg-dusky">
+                        <h3 class="text-muted">No posts available</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row bg-dusky">
+                <h1>My Resources </h1>
+                <div class="card">
+                    <div class="bg-dusky">
+                        <h3 class="text-muted">No resources posted</h3>
+                    </div>
+                </div>
+
             </div>
 
         </div>

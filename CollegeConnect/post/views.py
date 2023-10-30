@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .forms import PostForm
 
 # Create your views here.
 
@@ -7,7 +8,20 @@ def feed(request):
     return render(request, 'post/feed.html',context)
 
 def make_post(request):
-    context={}
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            pass
+            # Process the form data, save the Post object, etc.
+            # Example: post = form.save()
+            # You can customize this based on your requirements.
+    else:
+        form = PostForm()
+        
+    context={
+        'form':form
+    }
     return render(request,  'post/make_post.html',context)
 
 def post_detail(request,slug=None):

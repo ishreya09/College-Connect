@@ -42,7 +42,6 @@ class Club(models.Model):
     club_id= models.BigAutoField(auto_created=True,primary_key=True)
     club_logo= models.ImageField(blank=True,null=True,upload_to='club_logo/')
     branch= models.ForeignKey(Branch,on_delete=models.CASCADE)
-    approved=models.BooleanField(default=False)
     def __str__(self):
         return self.club_name
 
