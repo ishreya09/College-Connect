@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from django.contrib import messages
+from django.utils import timezone
 
 # models
 from django.contrib.auth.models import User
@@ -229,46 +230,6 @@ def edit_profile_submit(request):
         pass
     
 
-def mentor_registration(request):
-    username=request.user.__str__()
-    if(username=="AnonymousUser"):
-        messages.error(request,"Please sign in first")
-        return redirect("/account/mentor_registration")
-    if request.method == "POST":
-
-        print(request.FILES)
-        
-        if  'fileupload' in request.FILES:
-            resume = request.FILES['fileupload']
-            domains_input = request.POST.get("domains")
-            domain_list = domains_input.split(",")  # Assuming domains are comma-
-            user=User.objects.get(username=username)
-            student = Student.objects.get(user=user)
-            if (Mentor.objects.filter(username=username).exists()):
-                mentor=Mentor.objects.get(username=username)
-            else:
-                mentor = Mentor()
-            mentor.student=student
-            mentor.username=username
-            mentor.approved=0
-            mentor.resume = resume
-            mentor.description = request.POST.get("description")
-            mentor.save()
-            mentor.domain.add(*domain_list)
-            messages.success(request,"Role for mentor successfully applied!, We will get back to you in 1 week")
-            return redirect('/account/profile')  # Redirect to a success page or any desired location
-        
-        else:
-            messages.error(request,"Add your resume first!")
-            return redirect('/account/mentor_registration')
-        
-    context={}
-    if Mentor.objects.filter(username=username).exists():
-        context['mentor']=Mentor.objects.get(username=username)
-    return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
-
-
-
 def confirm_email(request):
     user=request.user
     current_site = get_current_site(request)
@@ -310,4 +271,56 @@ class ActivateAccount(View):
             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('/')
 
+
+def can_apply_again(mentor):
+    six_months_ago = timezone.now() - timezone.timedelta(days=180)  # 6 months = 180 days
+    if mentor.last_application_date < six_months_ago:
+        # get mentor
+        mentor = Mentor.objects.filter(user=mentor).first()
+        mentor.last_application_date = None
+        mentor.save()
+
+
+def mentor_registration(request):
+    username=request.user.__str__()
+    if(username=="AnonymousUser"):
+        messages.error(request,"Please sign in first")
+        return redirect("/account/mentor_registration")
+    if request.method == "POST":
+
+        print(request.FILES)
         
+        if  'fileupload' in request.FILES:
+            resume = request.FILES['fileupload']
+            domains_input = request.POST.get("domains")
+            domain_list = domains_input.split(",")  # Assuming domains are comma-
+            user=User.objects.get(username=username)
+            student = Student.objects.get(user=user)
+            if (Mentor.objects.filter(username=username).exists()):
+                mentor=Mentor.objects.get(username=username)
+            else:
+                mentor = Mentor()
+            
+            mentor.student=student
+            mentor.username=username
+            mentor.approved=0
+            mentor.resume = resume
+            mentor.description = request.POST.get("description")
+            mentor.last_application_date= timezone.now()
+            mentor.save()
+            mentor.domain.add(*domain_list)
+            messages.success(request,"Role for mentor successfully applied!, We will get back to you in 1 week")
+            return redirect('/account/profile')  # Redirect to a success page or any desired location
+        
+        else:
+            messages.error(request,"Add your resume first!")
+            return redirect('/account/mentor_registration')
+        
+    context={}
+    if Mentor.objects.filter(username=username).exists():
+        mentor=Mentor.objects.get(username=username)
+        can_apply_again(mentor)
+        context['mentor']=mentor
+    return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
+
+

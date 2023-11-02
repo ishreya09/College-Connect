@@ -149,13 +149,7 @@
         <!-- User Posts -->
         <div class="col-md-8">
             <div class="row bg-dusky">
-                <h3>Create Post </h3>
-
-                <!--form comes here (rich text editor) -->
-
-            </div>
-            <div class="row bg-dusky">
-                <h3>My Posts </h3>
+                <h3>Posts </h3>
             </div>
 
         </div>
@@ -163,38 +157,5 @@
 </div>
 
 
-<!-- Javascript -->
-<script>
-
-    // Find the elements by their IDs
-    const textToCopy = document.getElementById("profile-link-copy");
-    const copyButton = document.getElementById("copy-button");
-
-    // Add a click event listener to the copy button
-    copyButton.addEventListener("click", function () {
-        // Select the text to copy
-        textToCopy.select();
-
-        // Execute the copy command
-        if (document.execCommand("copy")) {
-            // Text was successfully copied
-            alert("Text copied to clipboard: " + textToCopy.value);
-
-            // tooltip that it was copied and self destroy in 2
-            $(copyButton).tooltip('show');
-
-            // Hide the tooltip after 2 seconds
-            setTimeout(function () {
-                $(copyButton).tooltip('hide');
-            }, 2000);
-
-        } else {
-            // Copy command failed
-            // alert("Copy to clipboard failed. Please copy the text manually.");
-        }
-    });
-
-
-</script>
 
 {% endblock %}

@@ -306,6 +306,23 @@ input[type="email"]:focus {
     padding: 10px;
 }
 
+/* Post app css */
+
+.feed-link {
+    color: #f1f1f1;
+    text-decoration: none;
+}
+
+.feed-link:hover {
+    background-color: #3f4b6e;
+}
+
+.post-content {
+    align-items: justify;
+    margin:20px;
+    padding: 10px;
+}
+
 
 .card {
     background-color: #202020; /* Dusky */
@@ -340,3 +357,5 @@ input[type="email"]:focus {
     background-color: #262630;
     color: #ccc;
 }
+
+

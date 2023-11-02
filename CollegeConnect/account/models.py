@@ -1,5 +1,10 @@
 from django.db import models
 
+from django.utils import timezone
+
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
 from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from branch.models import Department,Branch
@@ -22,6 +27,9 @@ class Student(models.Model):
     def __str__(self):
         return self.user.username
 
+    
+
+
 
 class Mentor(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE,related_name='mentor')
@@ -30,11 +38,29 @@ class Mentor(models.Model):
     domain= TaggableManager()
     description= models.CharField(max_length=5000,null=True, blank= True)
     approved= models.BooleanField(default=False)
+    last_application_date = models.DateTimeField(default=timezone.now(),null=True, blank=True)
 
     # write list domains function which returns a string
     def list_domains(self):
         return ", ".join([p.name for p in self.domain.all()])
-    
+    def set_ismentor(self):
+        if self.approved:
+            # find student and update database
+            s=Student.objects.get(pk=self.student.pk)
+            s.is_mentor=True
+            s.save()
+        else:
+            s=Student.objects.get(pk=self.student.pk)
+            s.is_mentor=False
+            s.save()
+
+
+            
+  
+@receiver(pre_save, sender=Mentor) # a trigger that's run everytime 
+def Mentor_pre_save(sender, instance, **kwargs):
+    instance.set_ismentor()
+
 
 class Club(models.Model):
     club_name= models.CharField(max_length=200,unique=True)

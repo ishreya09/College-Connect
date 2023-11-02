@@ -15,8 +15,11 @@
    
     {% if mentor and mentor.approved %}
     <p class="text-center h4 text-success">Application Approved</p>
-    {% elif mentor and not mentor.approved %}
-    <p class="text-center h4 text-warning">Application Pending</p>
+    {% elif mentor and not mentor.approved and mentor.last_application_date is not none %}
+    <p class="text-center h4 text-warning">
+        Application Pending<br> 
+        It looks like you have already applied within six months. Try again later!
+    </p>
     {% else %}
     <p class="text-center h4 text-primary">Happy to see you here</p>
     {% endif %}
@@ -53,10 +56,13 @@
                     <textarea id="description" name="description"  rows="10" class="form-control"
                         maxlength="5000">{{mentor.description}}</textarea>
                 </div>
+                {% if not mentor and not mentor.approved and mentor.last_application_date is none %}
+
                 <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
                     class="btn btn-success" onclick=return true;>
                     Apply for Mentorship
                 </button>
+                {% endif %}
             </div>
         </div>
     </form>

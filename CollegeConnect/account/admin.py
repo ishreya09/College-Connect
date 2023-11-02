@@ -51,6 +51,7 @@ class MentorAdmin(admin.ModelAdmin):
         'student',
         'username',
         'approved',
+        'resume',
         'list_domains',
     )
     search_fields=[
