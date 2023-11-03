@@ -2,6 +2,10 @@ from django.db import models
 
 from django.utils import timezone
 
+import CollegeConnect.settings as settings
+# send mail
+from django.core.mail import send_mail
+
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
@@ -53,13 +57,30 @@ class Mentor(models.Model):
             s=Student.objects.get(pk=self.student.pk)
             s.is_mentor=False
             s.save()
-
+    def send_approval_mail(self):
+        seven_day_ago=timezone.now() - timezone.timedelta(days=7)
+        if self.approved:
+            u=User.objects.get(username=self.username)
+            email_from = settings.EMAIL_HOST_USER
+            subject = 'Mentor Application Approved'
+            message = 'Congratulations '+ u.first_name+" "+ u.last_name +'!! Your mentor application has been approved. You can now mentor students at our platform College Connect.'
+            recipient_list = [self.student.college_email,u.email ]
+            send_mail( subject, message, email_from, recipient_list )
+            # elif self.last_application_date> seven_day_ago:
+        else:
+            u=User.objects.get(username=self.username)
+            email_from = settings.EMAIL_HOST_USER
+            subject = 'Removed as Mentor'
+            message = 'Sorry '+ u.first_name+" "+ u.last_name +', You can no longer mentor students at our platform College Connect.'
+            recipient_list = [self.student.college_email,u.email ]
+            send_mail( subject, message, email_from, recipient_list )
 
             
   
 @receiver(pre_save, sender=Mentor) # a trigger that's run everytime 
 def Mentor_pre_save(sender, instance, **kwargs):
     instance.set_ismentor()
+    instance.send_approval_mail()
 
 
 class Club(models.Model):
