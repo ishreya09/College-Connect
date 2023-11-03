@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from .forms import PostForm
+from .models import *
 
 from django.contrib import messages
 
@@ -24,12 +25,15 @@ def make_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            pass
-            # Process the form data, save the Post object, etc.
-            # Example: post = form.save()
-            # You can customize this based on your requirements.
-        
-        return redirect("/post/feed")
+            post = form.save(commit=False)
+            post.user = User.objects.get(username=username)
+            post.author = post.user.first_name+" "+post.user.last_name
+            post.save()
+            messages.success(request, "Post successfully created!")
+            return redirect("/post/feed")
+        else:
+            messages.error(request, "Error in form submission. Please correct the errors below.")
+    
     form = PostForm()    
     # print("Hello")
     context={

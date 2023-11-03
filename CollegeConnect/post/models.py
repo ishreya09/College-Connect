@@ -23,7 +23,7 @@ class Post(models.Model):
     user=  models.ForeignKey(User,on_delete=models.CASCADE)
     post_id= models.BigAutoField(primary_key=True,auto_created=True,serialize=False)
     title = models.CharField(max_length=500)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True,auto_created=True)
     content= RichTextUploadingField(blank=True,null=True)
     author= models.CharField(max_length=500,default="Anonymous")
     published_date= models.DateField(auto_now_add=True,blank=True,null=True)

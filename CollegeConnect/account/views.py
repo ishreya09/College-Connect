@@ -145,8 +145,16 @@ def profile(request):
         return redirect('/account/login')
 
 def profile_user(request,username):
+    who=request.user.__str__()
+    if(who=="AnonymousUser"):
+        messages.error(request,"Please sign in first")
+        return redirect("/account/login" )    
     print(username)
     if(username.__str__() != 'AnonymousUser'):
+        # check if user exists
+        if not User.objects.filter(username=username).exists():
+            messages.error(request,"Invalid User")
+            return redirect('/error404')
         user= User.objects.get(username=username)
         student = Student.objects.get(user=user)
         SRN= student.student_id
