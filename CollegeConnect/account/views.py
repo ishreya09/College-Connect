@@ -10,6 +10,10 @@ from django.contrib.auth.models import auth
 from branch.models import Department, Branch
 from .models import Student,Mentor
 
+from taggit.managers import TaggableManager
+from taggit.models import Tag
+
+
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -285,7 +289,7 @@ def mentor_registration(request):
     username=request.user.__str__()
     if(username=="AnonymousUser"):
         messages.error(request,"Please sign in first")
-        return redirect("/account/mentor_registration")
+        return redirect("/account/login" )
     if request.method == "POST":
 
         print(request.FILES)
@@ -294,6 +298,7 @@ def mentor_registration(request):
             resume = request.FILES['fileupload']
             domains_input = request.POST.get("domains")
             domain_list = domains_input.split(",")  # Assuming domains are comma-
+            
             user=User.objects.get(username=username)
             student = Student.objects.get(user=user)
             if (Mentor.objects.filter(username=username).exists()):
@@ -308,7 +313,14 @@ def mentor_registration(request):
             mentor.description = request.POST.get("description")
             mentor.last_application_date= timezone.now()
             mentor.save()
-            mentor.domain.add(*domain_list)
+            # mentor.domain.add(*domain_list)
+
+            for domain_name in domain_list:
+                # strip domain of spaces and make it in lower case only
+                domain_name = domain_name.strip().lower()
+                domain, created = Tag.objects.get_or_create(name=domain_name)
+                mentor.domain.add(domain)
+
             messages.success(request,"Role for mentor successfully applied!, We will get back to you in 1 week")
             return redirect('/account/profile')  # Redirect to a success page or any desired location
         
