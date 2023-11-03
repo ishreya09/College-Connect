@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import send_mail
 
-from .forms import SendEmailForm
 
 from .models import ContactUs
 # Create your views here.

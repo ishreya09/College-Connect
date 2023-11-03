@@ -42,7 +42,7 @@ class Mentor(models.Model):
     domain= TaggableManager()
     description= models.CharField(max_length=5000,null=True, blank= True)
     approved= models.BooleanField(default=False)
-    last_application_date = models.DateTimeField(default=timezone.now(),null=True, blank=True)
+    last_application_date = models.DateTimeField(auto_now_add=True,null=True, blank=True)
 
     # write list domains function which returns a string
     def list_domains(self):
@@ -108,7 +108,7 @@ class ClubMember(models.Model):
     club=models.ForeignKey(Club,on_delete=models.CASCADE,blank=True,null=True)
     club_head = models.BooleanField(default=False)
     social_media_manager= models.BooleanField(default=False)
-    joined_on = models.DateTimeField(default=timezone.now(),null=True, blank=True)
+    joined_on = models.DateTimeField(auto_now_add=True,null=True, blank=True)
     def __str__(self):
         return self.user.username + " (" + self.club.club_name +")"
 
