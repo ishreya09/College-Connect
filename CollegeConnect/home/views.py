@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from django.contrib import messages
+from django.core.mail import send_mail
+
+from .forms import SendEmailForm
 
 from .models import ContactUs
 # Create your views here.
@@ -25,9 +28,13 @@ def contact_us(request):
         if not query:
             messages.error(request, 'Query is required.')
         if name and email and query:
-            ContactUs.objects.create(name=name, email=email, query=query)
+            c= ContactUs()
+            c.name=name
+            c.email=email
+            c.query=query
+            c.save()
             return redirect ('/contact-success')
-        else:
+        else: 
             return redirect('/contact-us')
     context={}
     return render (request,'home/contactus.html',context)
@@ -48,4 +55,5 @@ def copyright(request):
 def error_404(request):
     context ={}
     return render(request, 'home/error404.html',context)
+
 
