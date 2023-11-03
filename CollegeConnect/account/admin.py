@@ -12,10 +12,7 @@ class StudentAdmin(admin.ModelAdmin):
         'branch',
         'college_email',
         'is_mentor',
-        'show_number',
-        'email_confirmed',
         'year_of_passing_out',
-
     )
     search_fields=[
         'department',
@@ -27,23 +24,28 @@ class StudentAdmin(admin.ModelAdmin):
 
     ]
     list_editable= [
-        'is_mentor',
-        'show_number',
-        'email_confirmed',
+        "is_mentor",
     ]
     list_filter=[
         'department',
-        'branch',
-        'student_id',
-        'user',
-        'college_email',
-        'whatsapp_number',
         'is_mentor',
         'email_confirmed',
         'show_number',
         'year_of_passing_out',
         
     ]
+    readonly_fields = (
+        'student_id',
+        'whatsapp_number',
+        'whatsapp_link',
+        'user',
+        'department',
+        'branch',
+        'college_email',
+        'show_number',
+        'email_confirmed',
+        'year_of_passing_out',
+    ) 
 
 
 class MentorAdmin(admin.ModelAdmin):

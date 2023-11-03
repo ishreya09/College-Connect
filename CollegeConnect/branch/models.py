@@ -12,4 +12,4 @@ class Branch(models.Model):
     branch_code= models.BigAutoField(primary_key=True, auto_created=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='branches') # one to many
     def __str__(self):
-        return self.branch_name
+        return self.branch_name+" ("+ self.department.department_name +")"

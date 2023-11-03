@@ -67,13 +67,16 @@ class Club(models.Model):
     club_desc= models.CharField(max_length=200)
     club_id= models.BigAutoField(auto_created=True,primary_key=True)
     club_logo= models.ImageField(blank=True,null=True,upload_to='club_logo/')
-    branch= models.ForeignKey(Branch,on_delete=models.CASCADE)
+    branch= models.ManyToManyField(Branch)
     def __str__(self):
         return self.club_name
 
 class ClubMember(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    club=models.ForeignKey(Club,on_delete=models.CASCADE)
+    club=models.ForeignKey(Club,on_delete=models.CASCADE,blank=True,null=True)
     club_head = models.BooleanField(default=False)
     social_media_manager= models.BooleanField(default=False)
+    joined_on = models.DateTimeField(default=timezone.now(),null=True, blank=True)
+    def __str__(self):
+        return self.user.username + " (" + self.club.club_name +")"
 
