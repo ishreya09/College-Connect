@@ -2,9 +2,6 @@ from django.db import models
 from taggit.managers import TaggableManager
 from branch.models import Branch
 
-def upload_to(instance, filename):
-    return 'resources/{}/{}'.format(instance.branch.branch_name, filename)
-
 class Resource(models.Model):
     title = models.CharField(max_length=255)
     files = models.FileField(upload_to='resource/')
