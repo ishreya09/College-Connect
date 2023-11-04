@@ -56,18 +56,4 @@
     
 </script>
     
-
-<script>
-
-    // select all labels inside id_branch
-    var labels = document.querySelectorAll('#id_branch label');
-    for (var i=0;i<labels.length;i++) {
-        // get only the text and not input tag
-        var text = labels[i].childNodes[1].nodeValue;
-        console.log(text.slice(5,-4))
-        labels[i].childNodes[1].nodeValue= " "+ labels[i].childNodes[1].nodeValue.slice(5,-4) 
-
-    }
-
-</script>
 {% endblock %}
