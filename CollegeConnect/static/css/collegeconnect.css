@@ -323,6 +323,14 @@ input[type="email"]:focus {
     padding: 10px;
 }
 
+.comment-card{
+    background-color: #242424;
+    box-shadow: 0 0 16px hsl(0, 0%, 9%);
+    border-radius: 1px;
+    padding: 10px;
+    margin: 10px;
+}
+
 
 .card {
     background-color: #202020; /* Dusky */
