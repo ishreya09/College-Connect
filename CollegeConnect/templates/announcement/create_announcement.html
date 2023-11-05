@@ -8,28 +8,13 @@
 {% block content %}
 <div class="container">
     <h1 class="text-center">Create Announcement</h1>
-    <form method="post" enctype="multipart/form-data" class="needs-validation">
+    <form method="post" enctype="multipart/form-data" action="/announcement/create" >
         {% csrf_token %}
-
+        <!-- load form -->
         <div class="form-group">
-            {{ form.title.label_tag }}
-            {{ form.title }}
+        {{ form.as_p }}
         </div>
 
-        <div class="form-group">
-            {{ form.featured_img.label_tag }}
-            {{ form.featured_img }}
-        </div>
-
-        <div class="form-group">
-            {{ form.content.label_tag }}
-            {{ form.content }}
-        </div>
-
-        <div class="form-group">
-            {{ form.branch.label_tag }}
-            {{ form.branch }}
-        </div>
 
         <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
             class="btn btn-success">Create Announcement</button>
