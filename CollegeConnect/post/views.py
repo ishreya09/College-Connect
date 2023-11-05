@@ -31,7 +31,7 @@ def feed(request):
     # sort wrt to most recent
     post = post.order_by('-created_at')
 
-    context={'post':post}
+    context={'post':post,"name":"My Feed"}
     return render(request, 'post/feed.html',context)
 
 @login_required(login_url='/account/login')
@@ -43,7 +43,7 @@ def tag_post(request,slug):
     post = Post.objects.filter(tags__name__in=[tag])
     # sort wrt to most recent
     post = post.order_by('-created_at')
-    context={'post':post}
+    context={'post':post,"name":"Tag: "+tag.name}
     return render(request, 'post/feed.html',context)
 
 @login_required(login_url='/account/login')
@@ -117,4 +117,57 @@ def add_comment(request,slug=None):
         c.save()
         messages.success(request, "Comment successfully added!")
         return redirect("/post/"+slug)
-    
+
+@login_required(login_url='/account/login')
+def edit_post(request,slug):
+    username=request.user.__str__()
+    post=Post.objects.get(slug=slug)
+    user=User.objects.get(username=username)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES,instance=post)
+        if form.is_valid() and post.user==user:
+            # get branches
+            branches = form.cleaned_data['branch']
+            # get tags
+            tags = form.cleaned_data['tags']
+            # get title
+            title = form.cleaned_data['title']
+
+            # create slug
+            slug = create_slug(username,title)
+
+            post = form.save(commit=False)
+            # post.user = User.objects.get(username=username)
+            post.author = post.user.first_name+" "+post.user.last_name
+            post.slug = slug
+            post.save()
+            # add branches
+            for branch in branches:
+                post.branch.add(branch)
+            # add tags
+            for tag in tags:
+                tag = tag.strip().lower()
+                domain, created = Tag.objects.get_or_create(name=tag)
+                post.tags.add(tag)
+            messages.success(request, "Post successfully created!")
+            return redirect("/post/feed")
+        else:
+            messages.error(request, "Error in form submission. Please correct the errors below.")
+
+    # store default post value in form
+    form = PostForm(instance=post)
+    context={
+        'form':form
+    }
+    return render(request,'post/edit_post.html',context)
+
+@login_required(login_url='/account/login')
+def delete_post(request,slug=None):
+    # find
+    post=Post.objects.get(slug=slug)
+
+    # delete
+    post.delete()
+    messages.success(request, "Post successfully deleted!")
+
+    return redirect("/post/feed")

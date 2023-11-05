@@ -12,7 +12,7 @@
 
     <div class="row">
         <div class="col-md-10">
-            <h1 class="text-right">My Feed</h1>
+            <h1 class="text-right">{{name}}</h1>
         </div>
         <div class="col-md-2">
             <a href="/post/make_post">
@@ -56,7 +56,10 @@
             <div class="text-center" style="padding:10px">
                 <a href="/post/{{p.slug}}" class="bg-charcoal-black">
                     Read More
-                </a>
+                </a><br>
+                {% if p.user == user %}
+                <a href="/post/edit_post/{{p.slug}}">Edit Post</a>
+                {% endif %}
             </div>
 
             <form class="text-center comment-card" method="post" action="/post/add-comment/{{p.slug}}">

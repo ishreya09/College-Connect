@@ -10,6 +10,7 @@
 
 <div class="container bg-dusky">
     <div class="row">
+        <div class="col-md-8">
         <h1 class=""> {{post.title}} </h1>
         <a class="text-medium text-muted" href="/account/profile/{{post.user}}">
             <h3>{{post.user}}</h3>
@@ -28,6 +29,19 @@
 
         <div class="post-content">
             {{post.content | safe}}
+        </div>
+        </div>
+        <div class="col-md-2">
+            {% if post.user == user %}
+            <a href="/post/edit_post/{{post.slug}}">
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                    class="btn btn-danger">Edit Post</button>
+            </a>
+            <a href="/post/delete_post/{{post.slug}}">
+                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                    class="btn btn-danger">Delete Post</button>
+            </a>
+            {% endif %}
         </div>
 
     </div>
