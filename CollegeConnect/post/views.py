@@ -7,6 +7,7 @@ from django.contrib import messages
 import re
 from taggit.models import Tag
 
+from django.http import JsonResponse
 
 # Create your views here.
 def create_slug(username,title):
@@ -83,8 +84,13 @@ def post_detail(request,slug=None):
     if(username=="AnonymousUser"):
         messages.error(request,"Please sign in first")
         return redirect("/account/login" )
-    post=Post.objects.get(slug=slug)    
-    context={'post':post}
+    
+    post=Post.objects.get(slug=slug)   
+    # get comments
+    comments = PostComment.objects.filter(post=post) 
+    comments = comments.order_by('-created_at')
+
+    context={'post':post,'comments':comments}
     return render(request,'post/post_detail.html',context)
 
 
@@ -105,5 +111,3 @@ def add_comment(request,slug=None):
         messages.success(request, "Comment successfully added!")
         return redirect("/post/"+slug)
     
-def get_comment(request,slug=None):
-    pass

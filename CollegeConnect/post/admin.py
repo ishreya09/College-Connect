@@ -2,5 +2,25 @@ from django.contrib import admin
 from .models import *
 
 # Register your models here.
-admin.site.register(Post)
-admin.site.register(PostComment)
+
+# create PostAdmin
+class PostAdmin(admin.ModelAdmin):
+    # display these fields in admin panel
+    list_display = ('title','user','created_at')
+    # add search bar
+    search_fields = ('title','author')
+    # add filter
+    list_filter = ('created_at','branch')
+
+
+# create PostComment
+class PostCommentAdmin(admin.ModelAdmin):
+    # display these fields in admin panel
+    list_display = ('user','post','comment','created_at')
+    # add search bar
+    search_fields = ('user','post','comment')
+    # add filter
+    list_filter = ('created_at',)
+
+admin.site.register(Post,PostAdmin)
+admin.site.register(PostComment,PostCommentAdmin)
