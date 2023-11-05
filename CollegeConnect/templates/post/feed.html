@@ -9,6 +9,7 @@
 {% block content %}
 
 <div class="container">
+
     <div class="row">
         <div class="col-md-10">
             <h1 class="text-right">My Feed</h1>
@@ -22,70 +23,43 @@
 
 
     </div>
+
     <div class="row">
 
+        {% for p in post %}
         <!-- repeatable card -->
         <div class="card">
-            <a class="feed-link" class="text-light" style="text-decoration:none;color:burlywood" href="#">
+            <a class="feed-link" class="text-light" style="text-decoration:none;color:burlywood"
+                href="/post/{{p.slug}}">
 
                 <div class="row text-light container">
                     <div class="col-md-10">
-                        <h1>How to make UI responsive!!</h1>
+                        <h1>{{p.title}}</h1>
                     </div>
                     <div class="col-md-2">
-                        <h3>John Doe </h3>
-                        <p class="text-medium text-muted">23/10/2023</p>
+                        <h3>{{p.user}}</h3>
+                        <p class="text-medium text-muted">{{p.created_at}}</p>
+                        <span>Tags: </span>
+                        {% for t in p.tags.all %}
+                            <span class="text-medium text-muted">
+                            {{t.name}}, 
+                            </span >
+                        {% endfor %}
                     </div>
                 </div>
             </a>
 
             <div class="post-content">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere totam sed, officia excepturi unde iste
-                asperiores quia? Ab ipsam beatae fugiat neque voluptatum animi tenetur, repellendus sapiente similique
-                aspernatur asperiores dolores tempore possimus iste perferendis eius voluptas vero saepe aliquam
-                distinctio corporis dignissimos nostrum. Aliquid earum eos temporibus beatae explicabo, reiciendis
-                doloribus, modi eum asperiores dolorum fuga dolorem aperiam quaerat voluptatibus obcaecati! Esse itaque
-                reprehenderit ullam aut, quidem, quo voluptatum mollitia eveniet qui id voluptas temporibus, dolorum
-                unde optio odit aliquam nulla exercitationem tempore quis. Impedit odit, sunt laboriosam illum aut odio?
-                Optio eos nobis labore cum quo eum expedita! Quo quisquam perferendis ab animi error commodi atque
-                earum, voluptatibus voluptatem possimus! Dignissimos repellat molestias assumenda sit ducimus corporis
-                doloribus, nam deserunt, maiores enim temporibus laboriosam eos recusandae vero saepe, repudiandae non
-                vel quae quaerat illo iure facilis. Maiores totam repudiandae tenetur placeat mollitia? Illo veniam et
-                necessitatibus sed itaque nihil magni eius asperiores amet ex deserunt, optio fugiat eos fuga cum minima
-                voluptate quis sint magnam velit labore temporibus. Ipsum ratione reprehenderit praesentium, nam quam
-                eligendi iusto perferendis consequatur natus quod autem obcaecati, officiis culpa, eum ad exercitationem
-                veniam corporis magni! Tempora, porro soluta. Perspiciatis molestias unde minus quod facilis quos in
-                odio rem veniam quia, assumenda numquam ex reiciendis excepturi, repellat dolorem impedit similique hic
-                fugiat nemo laudantium tempore itaque placeat nisi! Aperiam commodi quidem excepturi facilis quas porro
-                modi doloribus nobis, autem minus soluta repellendus? Mollitia eos vitae recusandae, quasi dolor nam,
-                corrupti beatae quis odit nulla officiis laudantium alias laborum soluta. Accusantium impedit
-                reprehenderit rem molestias, delectus corporis enim optio? Aliquid dolorem est dicta non vero nobis
-                corrupti distinctio velit consectetur quas fugiat obcaecati, quisquam id vitae placeat aspernatur nam
-                sapiente impedit nostrum reprehenderit exercitationem ullam repellat ut? Enim officiis quisquam
-                reprehenderit molestiae culpa dolor placeat officia totam mollitia repudiandae expedita natus, eum
-                consectetur dolorum porro delectus? Delectus porro cum, illo veritatis eum quo adipisci alias
-                blanditiis. Consectetur minima quas amet sed, doloribus nostrum aliquam veritatis illum eos repellat
-                autem ad accusantium, quod repudiandae enim laborum velit doloremque dolore hic veniam vero quasi
-                ratione fugiat voluptatem. Sint repudiandae delectus fugiat voluptas totam expedita, labore quaerat.
-                Ullam corporis fugit facere culpa. Officiis sapiente similique veniam in soluta, expedita tenetur sit
-                magni ex aut sequi, beatae quasi vel maxime aliquid a, quia quos architecto explicabo odit. Asperiores,
-                fugiat. Esse quam veniam, in molestias tempora aliquid, animi laudantium sapiente exercitationem facilis
-                cumque a? Possimus ipsum aliquid doloribus itaque ea repudiandae, nobis animi sit ducimus asperiores
-                voluptas. Expedita accusantium corporis veniam quis repellendus voluptatem delectus id repudiandae
-                dolores doloremque velit sit nulla, commodi odit quisquam deleniti deserunt repellat nobis eos. Enim
-                voluptates est labore assumenda vero ducimus mollitia quidem at tempora accusantium harum ut amet
-                asperiores, vitae magnam excepturi. Fugit molestias nemo, autem, nihil debitis natus voluptatum expedita
-                maxime omnis qui vitae a quasi tempora velit aspernatur asperiores sapiente rem molestiae porro eum
-                rerum necessitatibus maiores tenetur. Dolor, quas molestias! Officiis nostrum laudantium dolor, quas
-                iusto distinctio consequatur corporis veritatis!
-            </div>
-            <div class="text-center" style="padding:10px">
-            <a href="#" class="bg-charcoal-black" >
-               Read More
-            </a>
+                {{p.content | safe}}
             </div>
 
-            <form class="text-center bg-charcoal-black" method="post" action="#">
+            <div class="text-center" style="padding:10px">
+                <a href="/post/{{p.slug}}" class="bg-charcoal-black">
+                    Read More
+                </a>
+            </div>
+
+            <form class="text-center bg-charcoal-black" method="post" action="/post/add-comment/{{p.slug}}">
                 {% csrf_token %}
 
                 <div class="row">
@@ -100,7 +74,7 @@
 
                     <div class="col-md-2">
                         <button type="submit" style="width:90%;padding:20px;margin:25px;border-radius:20px"
-                        class="btn btn-success">Comment</button>
+                            class="btn btn-success">Comment</button>
                     </div>
 
                 </div>
@@ -108,196 +82,46 @@
             </form>
 
         </div>
-        
-        <!-- repeatable card -->
-        <div class="card">
-            <a class="feed-link" class="text-light" style="text-decoration:none;color:burlywood" href="#">
-
-                <div class="row text-light container">
-                    <div class="col-md-10">
-                        <h1>How to make UI responsive!!</h1>
-                    </div>
-                    <div class="col-md-2">
-                        <h3>John Doe </h3>
-                        <p class="text-medium text-muted">23/10/2023</p>
-                    </div>
-                </div>
-            </a>
-
-            <div class="post-content">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere totam sed, officia excepturi unde iste
-                asperiores quia? Ab ipsam beatae fugiat neque voluptatum animi tenetur, repellendus sapiente similique
-                aspernatur asperiores dolores tempore possimus iste perferendis eius voluptas vero saepe aliquam
-                distinctio corporis dignissimos nostrum. Aliquid earum eos temporibus beatae explicabo, reiciendis
-                doloribus, modi eum asperiores dolorum fuga dolorem aperiam quaerat voluptatibus obcaecati! Esse itaque
-                reprehenderit ullam aut, quidem, quo voluptatum mollitia eveniet qui id voluptas temporibus, dolorum
-                unde optio odit aliquam nulla exercitationem tempore quis. Impedit odit, sunt laboriosam illum aut odio?
-                Optio eos nobis labore cum quo eum expedita! Quo quisquam perferendis ab animi error commodi atque
-                earum, voluptatibus voluptatem possimus! Dignissimos repellat molestias assumenda sit ducimus corporis
-                doloribus, nam deserunt, maiores enim temporibus laboriosam eos recusandae vero saepe, repudiandae non
-                vel quae quaerat illo iure facilis. Maiores totam repudiandae tenetur placeat mollitia? Illo veniam et
-                necessitatibus sed itaque nihil magni eius asperiores amet ex deserunt, optio fugiat eos fuga cum minima
-                voluptate quis sint magnam velit labore temporibus. Ipsum ratione reprehenderit praesentium, nam quam
-                eligendi iusto perferendis consequatur natus quod autem obcaecati, officiis culpa, eum ad exercitationem
-                veniam corporis magni! Tempora, porro soluta. Perspiciatis molestias unde minus quod facilis quos in
-                odio rem veniam quia, assumenda numquam ex reiciendis excepturi, repellat dolorem impedit similique hic
-                fugiat nemo laudantium tempore itaque placeat nisi! Aperiam commodi quidem excepturi facilis quas porro
-                modi doloribus nobis, autem minus soluta repellendus? Mollitia eos vitae recusandae, quasi dolor nam,
-                corrupti beatae quis odit nulla officiis laudantium alias laborum soluta. Accusantium impedit
-                reprehenderit rem molestias, delectus corporis enim optio? Aliquid dolorem est dicta non vero nobis
-                corrupti distinctio velit consectetur quas fugiat obcaecati, quisquam id vitae placeat aspernatur nam
-                sapiente impedit nostrum reprehenderit exercitationem ullam repellat ut? Enim officiis quisquam
-                reprehenderit molestiae culpa dolor placeat officia totam mollitia repudiandae expedita natus, eum
-                consectetur dolorum porro delectus? Delectus porro cum, illo veritatis eum quo adipisci alias
-                blanditiis. Consectetur minima quas amet sed, doloribus nostrum aliquam veritatis illum eos repellat
-                autem ad accusantium, quod repudiandae enim laborum velit doloremque dolore hic veniam vero quasi
-                ratione fugiat voluptatem. Sint repudiandae delectus fugiat voluptas totam expedita, labore quaerat.
-                Ullam corporis fugit facere culpa. Officiis sapiente similique veniam in soluta, expedita tenetur sit
-                magni ex aut sequi, beatae quasi vel maxime aliquid a, quia quos architecto explicabo odit. Asperiores,
-                fugiat. Esse quam veniam, in molestias tempora aliquid, animi laudantium sapiente exercitationem facilis
-                cumque a? Possimus ipsum aliquid doloribus itaque ea repudiandae, nobis animi sit ducimus asperiores
-                voluptas. Expedita accusantium corporis veniam quis repellendus voluptatem delectus id repudiandae
-                dolores doloremque velit sit nulla, commodi odit quisquam deleniti deserunt repellat nobis eos. Enim
-                voluptates est labore assumenda vero ducimus mollitia quidem at tempora accusantium harum ut amet
-                asperiores, vitae magnam excepturi. Fugit molestias nemo, autem, nihil debitis natus voluptatum expedita
-                maxime omnis qui vitae a quasi tempora velit aspernatur asperiores sapiente rem molestiae porro eum
-                rerum necessitatibus maiores tenetur. Dolor, quas molestias! Officiis nostrum laudantium dolor, quas
-                iusto distinctio consequatur corporis veritatis!
-            </div>
-            <div class="text-center" style="padding:10px">
-            <a href="#" class="bg-charcoal-black" >
-               Read More
-            </a>
-            </div>
-
-            <form class="text-center bg-charcoal-black" method="post" action="#">
-                {% csrf_token %}
-
-                <div class="row">
-
-                    <div class="col-md-10">
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="comment" name="comment"
-                                placeholder="Add your comment here ..." />
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <button type="submit" style="width:90%;padding:20px;margin:25px;border-radius:20px"
-                        class="btn btn-success">Comment</button>
-                    </div>
-
-                </div>
-
-            </form>
-
-        </div>
-
-        <!-- repeatable card -->
-        <div class="card">
-            <a class="feed-link" class="text-light" style="text-decoration:none;color:burlywood" href="#">
-
-                <div class="row text-light container">
-                    <div class="col-md-10">
-                        <h1>How to make UI responsive!!</h1>
-                    </div>
-                    <div class="col-md-2">
-                        <h3>John Doe </h3>
-                        <p class="text-medium text-muted">23/10/2023</p>
-                    </div>
-                </div>
-            </a>
-
-            <div class="post-content">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere totam sed, officia excepturi unde iste
-                asperiores quia? Ab ipsam beatae fugiat neque voluptatum animi tenetur, repellendus sapiente similique
-                aspernatur asperiores dolores tempore possimus iste perferendis eius voluptas vero saepe aliquam
-                distinctio corporis dignissimos nostrum. Aliquid earum eos temporibus beatae explicabo, reiciendis
-                doloribus, modi eum asperiores dolorum fuga dolorem aperiam quaerat voluptatibus obcaecati! Esse itaque
-                reprehenderit ullam aut, quidem, quo voluptatum mollitia eveniet qui id voluptas temporibus, dolorum
-                unde optio odit aliquam nulla exercitationem tempore quis. Impedit odit, sunt laboriosam illum aut odio?
-                Optio eos nobis labore cum quo eum expedita! Quo quisquam perferendis ab animi error commodi atque
-                earum, voluptatibus voluptatem possimus! Dignissimos repellat molestias assumenda sit ducimus corporis
-                doloribus, nam deserunt, maiores enim temporibus laboriosam eos recusandae vero saepe, repudiandae non
-                vel quae quaerat illo iure facilis. Maiores totam repudiandae tenetur placeat mollitia? Illo veniam et
-                necessitatibus sed itaque nihil magni eius asperiores amet ex deserunt, optio fugiat eos fuga cum minima
-                voluptate quis sint magnam velit labore temporibus. Ipsum ratione reprehenderit praesentium, nam quam
-                eligendi iusto perferendis consequatur natus quod autem obcaecati, officiis culpa, eum ad exercitationem
-                veniam corporis magni! Tempora, porro soluta. Perspiciatis molestias unde minus quod facilis quos in
-                odio rem veniam quia, assumenda numquam ex reiciendis excepturi, repellat dolorem impedit similique hic
-                fugiat nemo laudantium tempore itaque placeat nisi! Aperiam commodi quidem excepturi facilis quas porro
-                modi doloribus nobis, autem minus soluta repellendus? Mollitia eos vitae recusandae, quasi dolor nam,
-                corrupti beatae quis odit nulla officiis laudantium alias laborum soluta. Accusantium impedit
-                reprehenderit rem molestias, delectus corporis enim optio? Aliquid dolorem est dicta non vero nobis
-                corrupti distinctio velit consectetur quas fugiat obcaecati, quisquam id vitae placeat aspernatur nam
-                sapiente impedit nostrum reprehenderit exercitationem ullam repellat ut? Enim officiis quisquam
-                reprehenderit molestiae culpa dolor placeat officia totam mollitia repudiandae expedita natus, eum
-                consectetur dolorum porro delectus? Delectus porro cum, illo veritatis eum quo adipisci alias
-                blanditiis. Consectetur minima quas amet sed, doloribus nostrum aliquam veritatis illum eos repellat
-                autem ad accusantium, quod repudiandae enim laborum velit doloremque dolore hic veniam vero quasi
-                ratione fugiat voluptatem. Sint repudiandae delectus fugiat voluptas totam expedita, labore quaerat.
-                Ullam corporis fugit facere culpa. Officiis sapiente similique veniam in soluta, expedita tenetur sit
-                magni ex aut sequi, beatae quasi vel maxime aliquid a, quia quos architecto explicabo odit. Asperiores,
-                fugiat. Esse quam veniam, in molestias tempora aliquid, animi laudantium sapiente exercitationem facilis
-                cumque a? Possimus ipsum aliquid doloribus itaque ea repudiandae, nobis animi sit ducimus asperiores
-                voluptas. Expedita accusantium corporis veniam quis repellendus voluptatem delectus id repudiandae
-                dolores doloremque velit sit nulla, commodi odit quisquam deleniti deserunt repellat nobis eos. Enim
-                voluptates est labore assumenda vero ducimus mollitia quidem at tempora accusantium harum ut amet
-                asperiores, vitae magnam excepturi. Fugit molestias nemo, autem, nihil debitis natus voluptatum expedita
-                maxime omnis qui vitae a quasi tempora velit aspernatur asperiores sapiente rem molestiae porro eum
-                rerum necessitatibus maiores tenetur. Dolor, quas molestias! Officiis nostrum laudantium dolor, quas
-                iusto distinctio consequatur corporis veritatis!
-            </div>
-            <div class="text-center" style="padding:10px">
-            <a href="#" class="bg-charcoal-black" >
-               Read More
-            </a>
-            </div>
-
-            <form class="text-center bg-charcoal-black" method="post" action="#">
-                {% csrf_token %}
-
-                <div class="row">
-
-                    <div class="col-md-10">
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="comment" name="comment"
-                                placeholder="Add your comment here ..." />
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <button type="submit" style="width:90%;padding:20px;margin:25px;border-radius:20px"
-                        class="btn btn-success">Comment</button>
-                    </div>
-
-                </div>
-
-            </form>
-
-        </div>
-
-
-
+        {% endfor %}
     </div>
 
 </div>
 
 <script>
+    function removeImgTags(text) {
+        // Use a regular expression to match and remove <img> tags
+        var regex = /<img[^>]*>/g;
+
+        // Replace the matched <img> tags with an empty string
+        return text.replace(regex, '');
+    }
+
+    function removeHtmlTagsKeepP(text) {
+        // Use a regular expression to match all HTML tags except <p>
+        var regex = /<[^>]+>(?!<\/?p>)/g;
+
+        // Replace the matched tags with an empty string
+        return text.replace(regex, '');
+    }
+
+
     // limit post-content class to 100 words
-    var postContetnt = document.getElementsByClassName('post-content')
-    postContents.forEach(function (postContent) {
-        var content = postContent.innerHTML;
-        if (content.length > 100) {
-            content = content.substring(0, 100);
-            content += '<span class="moreellipses">&hellip;</span><span class="morecontent"><span>' + postContent.innerHTML;
-            content += '<span class="readmore"><a href="/blog/{{ blog.slug }}/">Read more...</a></span>';
-            content += '</span></span>';
-            postContent.innerHTML = content;
+    var postContents = document.getElementsByClassName('post-content')
+    console.log(postContents)
+    for (var i = 0; i < postContents.length; i++) {
+        var content = postContents[i].innerHTML
+        content = removeImgTags(content)
+        content = removeHtmlTagsKeepP(content)
+
+        var words = content.split(' ')
+        // remove tags
+
+        var newContent = ''
+        for (var j = 0; j < 100; j++) {
+            newContent += words[j] + ' '
         }
-    });
+        postContents[i].innerHTML = newContent + '...'
+    }
 
 </script>
 

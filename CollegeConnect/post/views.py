@@ -3,7 +3,6 @@ from django.shortcuts import redirect
 
 from .forms import PostForm
 from .models import *
-
 from django.contrib import messages
 import re
 from taggit.models import Tag
@@ -24,7 +23,15 @@ def feed(request):
     if(username=="AnonymousUser"):
         messages.error(request,"Please sign in first")
         return redirect("/account/login" )
-    context={}
+    print(request.user.student.branch)
+    user_branch = request.user.student.branch 
+    # Filter posts by the user's branch
+    post = Post.objects.filter(branch=user_branch)
+
+    # sort wrt to most recent
+    post = post.order_by('-created_at')
+
+    context={'post':post}
     return render(request, 'post/feed.html',context)
 
 def make_post(request):
@@ -75,7 +82,28 @@ def post_detail(request,slug=None):
     username=request.user.__str__()
     if(username=="AnonymousUser"):
         messages.error(request,"Please sign in first")
-        return redirect("/account/login" )    
-    context={}
+        return redirect("/account/login" )
+    post=Post.objects.get(slug=slug)    
+    context={'post':post}
     return render(request,'post/post_detail.html',context)
 
+
+# create an api call to add comments
+def add_comment(request,slug=None):
+    username=request.user.__str__()
+    if(username=="AnonymousUser"):
+        messages.error(request,"Please sign in first")
+        return redirect("/account/login" )
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        post = Post.objects.get(slug=slug)
+        c = PostComment()
+        c.user=request.user
+        c.comment=comment
+        c.post=post
+        c.save()
+        messages.success(request, "Comment successfully added!")
+        return redirect("/post/"+slug)
+    
+def get_comment(request,slug=None):
+    pass
