@@ -5,12 +5,17 @@ from .models import Announcement
 
 from django.contrib import messages
 
+# get forms
+from .forms import AnnouncementForm
+
+# import login required
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
+
+
+@login_required(login_url='/account/login')
 def announcement(request):
-    username=request.user.__str__()
-    if(username=="AnonymousUser"):
-        messages.error(request,"Please sign in first")
-        return redirect("/account/login" )  
     user_branch = request.user.student.branch
     # retrive all   
     announcements = Announcement.objects.filter(branch= user_branch)
@@ -19,3 +24,20 @@ def announcement(request):
 
     context={'announcements':announcements}
     return render(request, 'announcement/announcement.html',context )
+
+@login_required(login_url='/account/login')
+def create(request):
+    if request.method == 'POST':
+        form = AnnouncementForm(request.POST, request.FILES)
+        if form.is_valid():
+            # save
+            announcement = form.save(commit=False)
+            announcement.post_by = request.user
+            announcement.save()
+            form.save_m2m() # for saving many to many
+            return redirect('/announcement')
+        else:
+            return render(request, 'announcement/create_announcement.html', {'form': form})
+    else:
+        form = AnnouncementForm()
+        return render(request, 'announcement/create_announcement.html', {'form': form})
