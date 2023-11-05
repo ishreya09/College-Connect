@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
 from .forms import PostForm
 from .models import *
@@ -19,11 +20,9 @@ def create_slug(username,title):
     slug = re.sub(r'\s', '-', slug)
     return slug
 
+@login_required(login_url='/account/login')
 def feed(request):
     username=request.user.__str__()
-    if(username=="AnonymousUser"):
-        messages.error(request,"Please sign in first")
-        return redirect("/account/login" )
     print(request.user.student.branch)
     user_branch = request.user.student.branch 
     # Filter posts by the user's branch
@@ -35,11 +34,22 @@ def feed(request):
     context={'post':post}
     return render(request, 'post/feed.html',context)
 
+@login_required(login_url='/account/login')
+def tag_post(request,slug):
+    username=request.user.__str__()
+    # get tag
+    tag = Tag.objects.get(slug=slug)
+    # get posts
+    post = Post.objects.filter(tags__name__in=[tag])
+    # sort wrt to most recent
+    post = post.order_by('-created_at')
+    context={'post':post}
+    return render(request, 'post/feed.html',context)
+
+@login_required(login_url='/account/login')
 def make_post(request):
     username=request.user.__str__()
-    if(username=="AnonymousUser"):
-        messages.error(request,"Please sign in first")
-        return redirect("/account/login" )    
+    
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -79,12 +89,10 @@ def make_post(request):
     }
     return render(request,'post/make_post.html',context)
 
+@login_required(login_url='/account/login')
 def post_detail(request,slug=None):
     username=request.user.__str__()
-    if(username=="AnonymousUser"):
-        messages.error(request,"Please sign in first")
-        return redirect("/account/login" )
-    
+        
     post=Post.objects.get(slug=slug)   
     # get comments
     comments = PostComment.objects.filter(post=post) 
@@ -94,12 +102,11 @@ def post_detail(request,slug=None):
     return render(request,'post/post_detail.html',context)
 
 
+
 # create an api call to add comments
+@login_required(login_url='/account/login')
 def add_comment(request,slug=None):
     username=request.user.__str__()
-    if(username=="AnonymousUser"):
-        messages.error(request,"Please sign in first")
-        return redirect("/account/login" )
     if request.method == 'POST':
         comment = request.POST.get('comment')
         post = Post.objects.get(slug=slug)
