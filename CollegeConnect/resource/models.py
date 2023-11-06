@@ -4,7 +4,9 @@ from branch.models import Branch
 from django.contrib.auth.models import User
 
 class Resource(models.Model):
-    user=  models.ForeignKey(User,on_delete=models.CASCADE)
+    # pk
+    id = models.AutoField(primary_key=True,auto_created=True)
+    user=  models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     title = models.CharField(max_length=255)
     files = models.FileField(upload_to='resource/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
