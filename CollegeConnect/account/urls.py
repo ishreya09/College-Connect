@@ -53,6 +53,7 @@ urlpatterns= [
 
     # show mentor
     path('show_mentor',views.show_mentor,name="show_mentor"),
+    path('mentor/tag/<domain>',views.show_mentors_by_domain,name="show_mentors_by_domain"),
 
 
 

@@ -92,6 +92,8 @@ def register_submit(request):
                 student.bio,student.whatsapp_number,student.whatsapp_link,student.student_id,student.college_email,student.year_of_passing_out=data
 
                 student.save()
+                auth.login(request, user)
+
                 
                 messages.success(request, 'Verify Your Account now!!')
                 return redirect ('/account/login')
@@ -369,6 +371,17 @@ def show_mentor(request):
     context={'mentors':mentors}
     return render(request, 'account/show_mentor.html',context)
 
+def show_mentors_by_domain(request,domain):
+    # get all mentors of branch
+    username= request.user.__str__()
+    # get Student
+    user=User.objects.get(username=username)
+    student=Student.objects.get(user=user)
+    # Branch
+    mentors=Mentor.objects.filter(approved=True,domain__slug=domain)    
+    print(mentors[0].student.user.username)
+    context={'mentors':mentors}
+    return render(request, 'account/show_mentor.html',context)
 
 
 def apply_for_membership(request): 
