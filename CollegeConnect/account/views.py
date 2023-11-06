@@ -358,7 +358,8 @@ def mentor_registration(request):
 
 def show_mentor(request,branch):
     # get all mentors of branch
-    mentors=Mentor.objects.filter(student__branch__branch_code=branch)
+    mentors=Mentor.objects.filter(student__branch__branch_code=branch,approved=True)    
+    print(mentors[0].student.user.username)
     context={'mentors':mentors}
     return render(request, 'account/show_mentor.html',context)
 

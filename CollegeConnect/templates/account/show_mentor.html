@@ -9,6 +9,18 @@
 {% block content %}
 
 <div class="container">
+    <!-- show usernames -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">Mentors</h1>
+        </div>
+
+        {% for mentor in mentors %}
+        <div class="card text-light">
+            <a class="text-light" href="/account/profile/{{mentor.student.user.username}}" style="color: black;">{{mentor.student.user.first_name}} {{mentor.student.user.last_name}}
+            </a>
+        </div>
+        {% endfor %}
     
     
 </div>
