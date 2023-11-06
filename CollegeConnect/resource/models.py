@@ -1,8 +1,10 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from branch.models import Branch
+from django.contrib.auth.models import User
 
 class Resource(models.Model):
+    user=  models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     files = models.FileField(upload_to='resource/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
