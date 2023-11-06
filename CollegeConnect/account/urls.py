@@ -52,7 +52,7 @@ urlpatterns= [
          name='password_reset_complete'),
 
     # show mentor
-    path('show_mentor/<branch>',views.show_mentor,name="show_mentor"),
+    path('show_mentor',views.show_mentor,name="show_mentor"),
 
 
 

@@ -17,12 +17,23 @@
 
         {% for mentor in mentors %}
         <div class="card text-light">
-            <a class="text-light" href="/account/profile/{{mentor.student.user.username}}" style="color: black;">{{mentor.student.user.first_name}} {{mentor.student.user.last_name}}
+            <a class="text-light" href="/account/profile/{{mentor.student.user.username}}" style="color: black;">
+                {{mentor.student.user.first_name}} {{mentor.student.user.last_name}}
             </a>
+            <!-- show domains -->
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-center">
+                        {% for domain in mentor.domains.all %}
+                        <span class="badge badge-pill badge-primary">{{domain.name}}</span>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
         </div>
         {% endfor %}
-    
-    
-</div>
 
-{% endblock %}
+
+    </div>
+
+    {% endblock %}
