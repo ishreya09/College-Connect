@@ -10,7 +10,10 @@ from django.contrib.auth.models import auth
 from branch.models import Department, Branch
 from .models import Student,Mentor,ClubMember
 from .forms import ClubMembershipApplicationForm
-from .decorators import club_head_or_social_media_manager_required, which_club_head
+from .decorator import club_head_or_social_media_manager_required, which_club_head
+from django.contrib.auth.decorators import login_required
+
+
 
 
 from taggit.managers import TaggableManager
@@ -137,11 +140,17 @@ def profile(request):
         student = Student.objects.get(user=user)
         SRN= student.student_id
         # mentor = Mentor.objects.get(student_id=SRN)
+        # check if mentor
+        mentor=None
+        if(student.is_mentor):
+            mentor=Mentor.objects.get(username=username)
+        
         context ={
             'user':user,
             'student':student,
-            # 'mentor':mentor,
+            'mentor':mentor,
         }
+
         return render(request, 'account/profile.html',context)
     else:
         messages.error(request,"Please sign in first")
@@ -183,8 +192,9 @@ def edit_profile(request):
         user= User.objects.get(username=username)
         student= Student.objects.get(user=user)
         branch=Branch.objects.filter(department=student.department)
-        print(branch)
-        print(student.branch.branch_code)
+
+        # print(branch)
+        # print(student.branch.branch_code)
         context ={'department':department,'user':user,'student':student,'branch':branch}
         return render(request, 'account/editprofile.html',context)
     else:
@@ -346,6 +356,8 @@ def mentor_registration(request):
         context['mentor']=mentor
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
 
+
+
 def apply_for_membership(request): 
     if request.method == 'POST':
         form = ClubMembershipApplicationForm(request.POST)
@@ -355,7 +367,7 @@ def apply_for_membership(request):
             club_membership_application.user = request.user
             club_membership_application.approval_status = "pending"
             club_membership_application.save()
-            return redirect('home')  
+            return redirect('/account/profile')  
 
     else:
         form = ClubMembershipApplicationForm()

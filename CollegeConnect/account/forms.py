@@ -3,8 +3,8 @@ from .models import ClubMember
 
 class ClubMembershipApplicationForm(forms.ModelForm):
     class Meta:
-        model = ClubMembershipApplication
-        fields = ['club', 'additional_information']
+        model = ClubMember
+        fields = ['user', 'social_media_manager','club_head']
         widgets = {
-            'additional_information': forms.Textarea(attrs={'rows': 3}),
+
         }
