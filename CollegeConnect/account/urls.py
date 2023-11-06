@@ -16,7 +16,7 @@ urlpatterns= [
     path('edit_profile',views.edit_profile,name="edit_profile"),
     path('edit_profile_submit',views.edit_profile_submit,name="edit_profile_submit"),
     path('mentor_registration',views.mentor_registration,name='mentor_registration'),
-
+    path('apply-for-clubmembership/', views.apply_for_membership, name='apply_for_membership'),
     # email confirmation
     path('confirm_email',views.confirm_email,name="email_confirm"),
     path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),

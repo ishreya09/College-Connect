@@ -8,7 +8,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from branch.models import Department, Branch
-from .models import Student,Mentor
+from .models import Student,Mentor,ClubMember
+from .forms import ClubMembershipApplicationForm
+from .decorators import club_head_or_social_media_manager_required, which_club_head
+
 
 from taggit.managers import TaggableManager
 from taggit.models import Tag
@@ -343,4 +346,20 @@ def mentor_registration(request):
         context['mentor']=mentor
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
 
+def apply_for_membership(request): 
+    if request.method == 'POST':
+        form = ClubMembershipApplicationForm(request.POST)
+        if form.is_valid():
+            # Create a new ClubMembershipApplication object
+            club_membership_application = form.save(commit=False)
+            club_membership_application.user = request.user
+            club_membership_application.approval_status = "pending"
+            club_membership_application.save()
+            return redirect('home')  
+
+    else:
+        form = ClubMembershipApplicationForm()
+
+    context = {'form': form}
+    return render(request, 'apply_for_membership.html', context)
 

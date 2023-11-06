@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.dispatch import receiver
 import CollegeConnect.settings as settings
 
-
+from announcement.models import Announcement
 # Create your models here.
 class ContactUs(models.Model):
     name = models.CharField(max_length=100)
@@ -33,3 +33,9 @@ class ContactUs(models.Model):
 @receiver(pre_save, sender=ContactUs) # a trigger that's run everytime 
 def ContactUs_pre_save(sender, instance, **kwargs):
     instance.send_response_mail()
+
+def home(request):
+    context = {
+        'announcements': Announcement.objects.all().order_by('-date_created')[:5] 
+    }
+    return render(request, 'home/home.html', context)
