@@ -34,8 +34,3 @@ class ContactUs(models.Model):
 def ContactUs_pre_save(sender, instance, **kwargs):
     instance.send_response_mail()
 
-def home(request):
-    context = {
-        'announcements': Announcement.objects.all().order_by('-date_created')[:5] 
-    }
-    return render(request, 'home/home.html', context)
