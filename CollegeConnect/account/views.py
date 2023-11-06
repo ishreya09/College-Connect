@@ -356,6 +356,12 @@ def mentor_registration(request):
         context['mentor']=mentor
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
 
+def show_mentor(request,branch):
+    # get all mentors of branch
+    mentors=Mentor.objects.filter(student__branch__branch_code=branch)
+    context={'mentors':mentors}
+    return render(request, 'account/show_mentor.html',context)
+
 
 
 def apply_for_membership(request): 
