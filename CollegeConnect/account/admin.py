@@ -61,6 +61,7 @@ class MentorAdmin(admin.ModelAdmin):
     list_filter=[
         'domain',
         'approved',
+        'last_application_date'
         
     ]
 
