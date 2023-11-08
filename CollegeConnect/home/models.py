@@ -3,6 +3,8 @@ from django.db.models.signals import pre_save
 from django.core.mail import send_mail
 from django.dispatch import receiver
 import CollegeConnect.settings as settings
+from django.db import connections
+
 
 from announcement.models import Announcement
 # Create your models here.
@@ -28,9 +30,12 @@ class ContactUs(models.Model):
                 [self.email],
                 fail_silently=False,
             )
+            with connections.cursor() as cursor:
+                cursor.execute("CALL UpdateContactUsResponse();")
+
+        
     
 
 @receiver(pre_save, sender=ContactUs) # a trigger that's run everytime 
 def ContactUs_pre_save(sender, instance, **kwargs):
     instance.send_response_mail()
-
