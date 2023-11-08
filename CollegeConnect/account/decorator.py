@@ -85,4 +85,22 @@ def club_head_or_social_media_manager_required(view_func):
             return redirect('/error404')
     return wrapper_func
 
+def is_club_member(username):
+    try:
+        user=User.objects.get(username=username)
+        club_member=ClubMember.objects.get(user=user)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+def which_club_member(username):
+    try:
+        user=User.objects.get(username=username)
+        club_member=ClubMember.objects.get(user=user)
+        return club_member.club
+    except Exception as e:
+        print(e)
+        return False
+
 

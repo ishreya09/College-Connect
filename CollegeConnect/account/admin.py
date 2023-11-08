@@ -34,20 +34,7 @@ class StudentAdmin(admin.ModelAdmin):
         'year_of_passing_out',
         
     ]
-    readonly_fields = (
-        'student_id',
-        'whatsapp_number',
-        'whatsapp_link',
-        'user',
-        'department',
-        'branch',
-        'college_email',
-        'show_number',
-        'email_confirmed',
-        'year_of_passing_out',
-    ) 
-
-
+    
 class MentorAdmin(admin.ModelAdmin):
     list_display=(
         'student',

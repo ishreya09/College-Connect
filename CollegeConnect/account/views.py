@@ -10,8 +10,10 @@ from django.contrib.auth.models import auth
 from branch.models import Department, Branch
 from .models import Student,Mentor,ClubMember,Club
 from .forms import ClubMembershipApplicationForm
-from .decorator import club_head_or_social_media_manager_required, which_club_head
+from .decorator import *
 from django.contrib.auth.decorators import login_required
+from post.models import Post
+from resource.models import Resource
 
 
 
@@ -147,10 +149,44 @@ def profile(request):
         if(student.is_mentor):
             mentor=Mentor.objects.get(username=username)
         
+        club_head=False
+        if(is_club_head(username)):
+            club_head=True
+        
+        social_media_manager=False
+        if(is_social_media_manager(username)):
+            social_media_manager=True
+
+        club_member=False
+        if(is_club_member(username)):
+            club_member=True
+        
+        # check which clubs user is in
+        club_member=ClubMember.objects.filter(user=user)
+        club_list=[clb for clb in Club.objects.all()]
+        club=[club.club_name for club in club_list]
+
+        # Filter posts by the user's branch
+        post = Post.objects.filter(user=user)
+
+        # sort wrt to most recent
+        post = post.order_by('-created_at')
+
+        resource = Resource.objects.filter(user=user)
+        resource = resource.order_by('-uploaded_at')
+
+        
         context ={
             'user':user,
             'student':student,
             'mentor':mentor,
+            'club_head':club_head,
+            'social_media_manager':social_media_manager,
+            'club_member':club_member,
+            'clubs':club,
+            'post':post,
+            'resources':resource,
+
         }
 
         return render(request, 'account/profile.html',context)
