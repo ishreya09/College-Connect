@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from branch.models import Department, Branch
-from .models import Student,Mentor,ClubMember
+from .models import Student,Mentor,ClubMember,Club
 from .forms import ClubMembershipApplicationForm
 from .decorator import club_head_or_social_media_manager_required, which_club_head
 from django.contrib.auth.decorators import login_required
@@ -367,7 +367,7 @@ def show_mentor(request):
     # Branch
     branch=Branch.objects.get(branch_code=student.branch.branch_code)
     mentors=Mentor.objects.filter(student__branch__branch_code=branch.branch_code,approved=True)    
-    print(mentors[0].student.user.username)
+    #print(mentors[0].student.user.username)
     context={'mentors':mentors}
     return render(request, 'account/show_mentor.html',context)
 
@@ -379,25 +379,35 @@ def show_mentors_by_domain(request,domain):
     student=Student.objects.get(user=user)
     # Branch
     mentors=Mentor.objects.filter(approved=True,domain__slug=domain)    
-    print(mentors[0].student.user.username)
+    #print(mentors[0].student.user.username)
     context={'mentors':mentors}
     return render(request, 'account/show_mentor.html',context)
 
 
-def apply_for_membership(request): 
+@club_head_required
+def approve_membership(request):
     if request.method == 'POST':
-        form = ClubMembershipApplicationForm(request.POST)
-        if form.is_valid():
-            # Create a new ClubMembershipApplication object
-            club_membership_application = form.save(commit=False)
-            club_membership_application.user = request.user
-            club_membership_application.approval_status = "pending"
-            club_membership_application.save()
-            return redirect('/account/profile')  
+        srn = request.POST.get('srn',False)
+        social_media_manager = request.POST.get('social_media_manager',False)
+        username = request.user.__str__()
+        club = which_club_head(username)
+        club_head = User.objects.get(username=username)
+        print(club)
+        club = Club.objects.get(club_name=club)
+        if (Student.objects.filter(student_id=srn).exists()):
+            s = Student.objects.get(student_id=srn)
+            print(s.user)
+            if(ClubMember.objects.filter(user=s.user,club=club).exists()):
+                c=ClubMember.objects.get(user=s.user,club=club)
+            else:
+                c=ClubMember()
+            c.user= s.user
+            c.club=club
+            if(social_media_manager):
+                c.social_media_manager=True
+            c.save()
+        return redirect('/account/profile')
 
-    else:
-        form = ClubMembershipApplicationForm()
-
-    context = {'form': form}
-    return render(request, 'apply_for_membership.html', context)
-
+        
+    context = {}
+    return render(request, 'account/approve_membership.html', context)
