@@ -90,8 +90,9 @@ class Mentor(models.Model):
   
 @receiver(pre_save, sender=Mentor) # a trigger that's run everytime 
 def Mentor_pre_save(sender, instance, **kwargs):
-    instance.set_ismentor()
-    instance.send_approval_mail()
+    if instance.pk is not None:
+        instance.set_ismentor()
+        instance.send_approval_mail()
 
 
 class Club(models.Model):
