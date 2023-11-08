@@ -15,6 +15,12 @@ from django.contrib.auth.decorators import login_required
 from post.models import Post
 from resource.models import Resource
 
+# DBMS
+from django.http import HttpResponse
+from django.db import connection
+
+# admin decorator
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 
@@ -418,6 +424,27 @@ def show_mentors_by_domain(request,domain):
     #print(mentors[0].student.user.username)
     context={'mentors':mentors}
     return render(request, 'account/show_mentor.html',context)
+
+
+@staff_member_required(login_url='/admin')
+def remove_not_approved_mentors_six_months(request):
+    # Check if the user is an admin
+    if request.user.is_staff:
+        with connection.cursor() as cursor:
+            cursor.callproc('RemoveInactiveMentorsSixMonths')
+        return HttpResponse("Inactive mentors removed successfully.")
+    else:
+        return HttpResponse("Permission denied.")
+
+@staff_member_required(login_url='/admin')
+def remove_not_approved_mentors_one_day(request):
+    # Check if the user is an admin
+    if request.user.is_staff:
+        with connection.cursor() as cursor:
+            cursor.callproc('RemoveInactiveMentorsOneDay')
+        return HttpResponse("Inactive mentors removed successfully.")
+    else:
+        return HttpResponse("Permission denied.")
 
 
 @club_head_required

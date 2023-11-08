@@ -2,15 +2,12 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from django.contrib import messages
-from django.core.mail import send_mail
-from announcement.models import Announcement
 
 
 from .models import ContactUs
 # Create your views here.
 def home(request):
-    
-    context={ 'announcements': Announcement.objects.all().order_by('-date_created')[:5] }
+    context={}
     return render(request, 'home/home.html', context)
 
 def privacypolicy(request):

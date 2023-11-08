@@ -54,6 +54,8 @@ urlpatterns= [
     # show mentor
     path('show_mentor',views.show_mentor,name="show_mentor"),
     path('mentor/tag/<domain>',views.show_mentors_by_domain,name="show_mentors_by_domain"),
+    path('mentors/remove_not_approved_six_months', views.remove_not_approved_mentors_six_months, name='remove_not_approved_mentors_six_months'),
+    path('mentors/remove_not_approved_one_day', views.remove_not_approved_mentors_one_day, name='remove_not_approved_mentors_one_day'),
 
 
 
