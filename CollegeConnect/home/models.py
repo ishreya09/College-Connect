@@ -30,8 +30,8 @@ class ContactUs(models.Model):
                 [self.email],
                 fail_silently=False,
             )
-            with connections.cursor() as cursor:
-                cursor.execute("CALL UpdateContactUsResponse();")
+            # with connections.cursor() as cursor:
+            #     cursor.execute("CALL UpdateContactUsResponse();")
 
         
     
