@@ -432,7 +432,7 @@ def remove_not_approved_mentors_six_months(request):
     if request.user.is_staff:
         with connection.cursor() as cursor:
             cursor.callproc('RemoveInactiveMentorsSixMonths')
-        return HttpResponse("Inactive mentors removed successfully.")
+        return redirect("/admin/account/mentor")
     else:
         return HttpResponse("Permission denied.")
 
@@ -441,8 +441,12 @@ def remove_not_approved_mentors_one_day(request):
     # Check if the user is an admin
     if request.user.is_staff:
         with connection.cursor() as cursor:
-            cursor.callproc('RemoveInactiveMentorsOneDay')
-        return HttpResponse("Inactive mentors removed successfully.")
+            try:
+                cursor.callproc('RemoveInactiveMentorsOneDay')
+                return redirect("/admin/account/mentor")
+            except Exception as e:
+                return HttpResponse(f"Error executing procedure: {str(e)}")
+
     else:
         return HttpResponse("Permission denied.")
 

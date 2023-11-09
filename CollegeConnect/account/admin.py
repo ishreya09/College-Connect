@@ -1,10 +1,12 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 
 # Register your models here.
 from .models import *
 from taggit.models import Tag 
 from django.urls import reverse
 from django.utils.html import format_html
+
 class StudentAdmin(admin.ModelAdmin):
     list_display=(
         'student_id',
@@ -73,11 +75,17 @@ class MentorAdmin(admin.ModelAdmin):
     list_domains.short_description = "Domains"  # Set a custom column header for the domains
 
     def remove_not_approved_mentors_action_six_months(self, request, queryset):
-        return format_html('<a class="button" href="/account/mentor/remove_not_approved_six_months">Remove not approved Mentors for over 6 months</a>')
+        view_url = reverse('remove_not_approved_mentors_six_months')
+        # Redirect the user to the view URL
+        return HttpResponseRedirect(view_url)
+        # return format_html('<a class="button" href="/account/mentor/remove_not_approved_six_months">Remove not approved Mentors for over 6 months</a>')
     remove_not_approved_mentors_action_six_months.short_description = "Remove Not Approved Mentors for over Six months"
     
     def remove_not_approved_mentors_action_one_day(self, request, queryset):
-        return format_html('<a class="button" href="/account/mentor/remove_not_approved_one_day">Remove not approved Mentors for over 6 months</a>')
+        view_url = reverse('remove_not_approved_mentors_one_day')
+        # Redirect the user to the view URL
+        return HttpResponseRedirect(view_url)
+    
     remove_not_approved_mentors_action_one_day.short_description = "Remove Not Approved Mentors for over One day"
 
 
