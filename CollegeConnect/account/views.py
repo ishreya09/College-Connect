@@ -563,7 +563,10 @@ def approve_membership(request):
             if(social_media_manager):
                 c.social_media_manager=True
             c.save()
-        return redirect('/account/profile')
+            return redirect('/account/profile')
+        else:
+            messages.error("Student not present in our system")
+            return redirect('/account/approve_membership')
 
         
     context = {}
