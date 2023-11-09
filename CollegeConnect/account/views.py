@@ -309,7 +309,7 @@ def profile_user(request,username):
             'resources': resources,
         }
 
-        return render(request, 'account/profile.html', context)
+        return render(request, 'account/profile_detail.html', context)
     else:
         messages.error(request, "User profile not found.")
         return redirect('/account/login')

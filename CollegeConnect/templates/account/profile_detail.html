@@ -12,146 +12,148 @@
     <h1> {{user.first_name}} {{user.last_name}} </h1>
     <div class="row">
         <!-- User details -->
-        <div class="col bg-dusky mb-3 content">
+        <div class="col" style="padding:20px;">
+            <div class="bg-dusky mb-3 content">
 
 
-            <div class="row">
-                <h3> Bio </h3>
-                <span>
-                    <!-- bio -->
-                    {{student.bio}}
-                </span>
-            </div>
-            <hr>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>SRN</span>
-                </div>
-                <div class="col-md-8">
-                    <span>{{student.student_id}}</span>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Username</span>
-                </div>
-                <div class="col-md-8">
-                    <span> {{user.username}}</span>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Department</span>
-                </div>
-                <div class="col-md-8">
-                    <span>{{student.department}}</span>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Branch</span>
-                </div>
-                <div class="col-md-8">
-                    <span>{{student.branch}}</span>
-                </div>
-            </div>
-
-            <hr>
-
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Year of Passing</span>
-                </div>
-                <div class="col-md-8">
-                    <span>{{student.year_of_passing_out}}</span>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Profile Link</span>
-                </div>
-                <div class="col-md-8">
-                    <a href="http://127.0.0.1:8000/account/profile/{{user.username}}">{{user.username}}</a>
-                </div>
-            </div>
-
-            <hr>
-            {% if club_member %}
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Clubs</span>
-                </div>
-                <div class="col-md-8">
-                    {% for c in clubs %}
-                    {{c}} <span class="text-muted">|</span>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <hr>
-            {% endif %}
-
-            {% if student.is_mentor %}
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Resume</span>
-                </div>
-                <div class="col-md-8">
-                    <a href="{{mentor.resume.url}}"><span>View Resume</span></a>
-                </div>
-            </div>
-            <hr>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span>Domain</span>
-                </div>
-                <div class="col-md-8">
-                    {% for domain in mentor.domain.all %}
-                    <span>{{ domain }}</span>
-                    {% endfor %}
-                </div>
-            </div>
-            <hr>
-            {% endif %}
-            <div class="row">
-
-                <div class="col-md-4">
-                    {% if student.show_number %}
+                <div class="row">
+                    <h3> Bio </h3>
                     <span>
-                        <a href="{{student.whatsapp_link}}">
-                            <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
-                                class="btn btn-success">
-                                Chat
-                            </button>
-                        </a>
+                        <!-- bio -->
+                        {{student.bio}}
                     </span>
-                    {% endif %}
                 </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>SRN</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.student_id}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Username</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span> {{user.username}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Department</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.department}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Branch</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.branch}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Year of Passing</span>
+                    </div>
+                    <div class="col-md-8">
+                        <span>{{student.year_of_passing_out}}</span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Profile Link</span>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="http://127.0.0.1:8000/account/profile/{{user.username}}">{{user.username}}</a>
+                    </div>
+                </div>
+
+                <hr>
+                {% if club_member %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Clubs</span>
+                    </div>
+                    <div class="col-md-8">
+                        {% for c in clubs %}
+                        {{c}} <span class="text-muted">|</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr>
+                {% endif %}
+
+                {% if student.is_mentor %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Resume</span>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="{{mentor.resume.url}}"><span>View Resume</span></a>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <span>Domain</span>
+                    </div>
+                    <div class="col-md-8">
+                        {% for domain in mentor.domain.all %}
+                        <span>{{ domain }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                {% endif %}
+                <div class="row">
+
+                    <div class="col-md-4">
+                        {% if student.show_number %}
+                        <span>
+                            <a href="{{student.whatsapp_link}}">
+                                <button type="submit" style="width:90%;padding:20px;margin:20px;border-radius:20px"
+                                    class="btn btn-success">
+                                    Chat
+                                </button>
+                            </a>
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- <hr> -->
+
+
             </div>
-
-            <!-- <hr> -->
-
-
         </div>
     </div>
 
     <!-- User Posts -->
-    <div class="col-md-8">
+    <div class="col">
         <div class="row bg-dusky">
 
         </div>
