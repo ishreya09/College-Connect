@@ -29,8 +29,8 @@
             <div class="card-body">
                 <h2 class="card-title">{{ resource.title }}</h2>
                 {% if resource.user == user %}
-                <a href="/resource/edit/{{resource.id}}">Edit Post</a><br>
-                <a href="/resource/delete/{{resource.id}}">Delete Post</a><br>
+                <a href="/resource/edit/{{resource.id}}">Edit Resource</a><br>
+                <a href="/resource/delete/{{resource.id}}">Delete Resource</a><br>
                 {% endif %}
                 <span class="text-muted">
                     Uploaded on: {{ resource.uploaded_at }} |

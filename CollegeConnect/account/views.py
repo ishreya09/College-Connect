@@ -265,24 +265,54 @@ def profile_user(request,username):
         messages.error(request,"Please sign in first")
         return redirect("/account/login" )    
     print(username)
-    if(username.__str__() != 'AnonymousUser'):
-        # check if user exists
-        if not User.objects.filter(username=username).exists():
-            messages.error(request,"Invalid User")
-            return redirect('/error404')
-        user= User.objects.get(username=username)
-        student = Student.objects.get(user=user)
-        SRN= student.student_id
-        # mentor = Mentor.objects.get(student_id=SRN)
-        context ={
-            'user':user,
-            'student':student,
-            # 'mentor':mentor,
+    user_profile = (
+        User.objects
+        .filter(username=username)
+        .select_related('student')  # Perform a join for the student
+        .prefetch_related(
+            'student__mentor', 'student__branch'
+        )  # Perform joins for mentor, club members, and student branches
+        .first()  # Retrieve the first matching user (you can adjust the query as needed)
+    )
+
+    if user_profile:
+        user = user_profile
+        student = user.student
+        mentor = user_profile.student.mentor if user_profile.student.is_mentor else None
+
+        club_head = is_club_head(username)
+        social_media_manager = is_social_media_manager(username)
+        club_member = is_club_member(username)
+
+        # Check which clubs the user is in
+        club_members = ClubMember.objects.filter(user=user)
+        club_names = [club.user.username for club in club_members]
+
+        # Filter posts by the user's branch
+        posts = Post.objects.filter(user=user)
+
+        # Sort posts by the most recent
+        posts = posts.order_by('-created_at')
+
+        resources = Resource.objects.filter(user=user)
+        resources = resources.order_by('-uploaded_at')
+
+        context = {
+            'user': user,
+            'student': student,
+            'mentor': mentor,
+            'club_head': club_head,
+            'social_media_manager': social_media_manager,
+            'club_member': club_member,
+            'clubs': club_names,
+            'post': posts,
+            'resources': resources,
         }
-        return render(request, 'account/profile_detail.html',context)
+
+        return render(request, 'account/profile.html', context)
     else:
-        messages.error(request,"Invalid User")
-        return redirect('/error404')
+        messages.error(request, "User profile not found.")
+        return redirect('/account/login')
 
 def change_password(request):
     context ={}

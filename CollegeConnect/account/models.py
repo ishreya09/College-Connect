@@ -60,7 +60,7 @@ class Mentor(models.Model):
     def send_approval_mail(self):
         # seven_day_ago=timezone.now() - timezone.timedelta(days=7)
         if self.approved:
-            u=User.objects.get(username=self.username)
+            u=User.objects.get(username=self.student.user.username)
             print("hello")
             email_from = settings.EMAIL_HOST_USER
             subject = 'Mentor Application Approved'
@@ -74,7 +74,7 @@ class Mentor(models.Model):
             except Exception as e:
                 print(f"Email sending failed: {e}")
         else:
-            u=User.objects.get(username=self.username)
+            u=User.objects.get(username=self.student.user.username)
             email_from = settings.EMAIL_HOST_USER
             subject = 'Removed as Mentor'
             message = 'Sorry '+ u.first_name+" "+ u.last_name +', You can no longer mentor students at our platform College Connect.'
