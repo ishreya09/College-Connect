@@ -143,62 +143,121 @@ def logout(request):
     return redirect('/')
 
 
-def profile(request):
-    username= request.user
-    if(username.__str__() != 'AnonymousUser'):
-        user= User.objects.get(username=username)
-        student = Student.objects.get(user=user)
-        SRN= student.student_id
-        # mentor = Mentor.objects.get(student_id=SRN)
-        # check if mentor
-        mentor=None
-        if(student.is_mentor):
-            mentor=Mentor.objects.get(username=username)
+# def profile(request):
+#     username= request.user
+#     if(username.__str__() != 'AnonymousUser'):
+#         user= User.objects.get(username=username)
+#         student = Student.objects.get(user=user)
+#         SRN= student.student_id
+#         # mentor = Mentor.objects.get(student_id=SRN)
+#         # check if mentor
+#         mentor=None
+#         if(student.is_mentor):
+#             mentor=Mentor.objects.get(username=username)
         
-        club_head=False
-        if(is_club_head(username)):
-            club_head=True
+#         club_head=False
+#         if(is_club_head(username)):
+#             club_head=True
         
-        social_media_manager=False
-        if(is_social_media_manager(username)):
-            social_media_manager=True
+#         social_media_manager=False
+#         if(is_social_media_manager(username)):
+#             social_media_manager=True
 
-        club_member=False
-        if(is_club_member(username)):
-            club_member=True
+#         club_member=False
+#         if(is_club_member(username)):
+#             club_member=True
         
-        # check which clubs user is in
-        club_member=ClubMember.objects.filter(user=user)
-        club_list=[clb for clb in Club.objects.all()]
-        club=[club.club_name for club in club_list]
+#         # check which clubs user is in
+#         club_member=ClubMember.objects.filter(user=user)
+#         club_list=[clb for clb in Club.objects.all()]
+#         club=[club.club_name for club in club_list]
+
+#         # Filter posts by the user's branch
+#         post = Post.objects.filter(user=user)
+
+#         # sort wrt to most recent
+#         post = post.order_by('-created_at')
+
+#         resource = Resource.objects.filter(user=user)
+#         resource = resource.order_by('-uploaded_at')
+
+        
+#         context ={
+#             'user':user,
+#             'student':student,
+#             'mentor':mentor,
+#             'club_head':club_head,
+#             'social_media_manager':social_media_manager,
+#             'club_member':club_member,
+#             'clubs':club,
+#             'post':post,
+#             'resources':resource,
+
+#         }
+
+#         return render(request, 'account/profile.html',context)
+#     else:
+#         messages.error(request,"Please sign in first")
+#         return redirect('/account/login')
+
+
+# with joins
+def profile(request):
+    username = request.user
+    if username.is_anonymous:
+        messages.error(request, "Please sign in first")
+        return redirect('/account/login')
+
+    # Retrieve user profile data using the joins query
+    user_profile = (
+        User.objects
+        .filter(username=username)
+        .select_related('student')  # Perform a join for the student
+        .prefetch_related(
+            'student__mentor', 'student__branch'
+        )  # Perform joins for mentor, club members, and student branches
+        .first()  # Retrieve the first matching user (you can adjust the query as needed)
+    )
+
+    if user_profile:
+        user = user_profile
+        student = user.student
+        mentor = user_profile.student.mentor if user_profile.student.is_mentor else None
+
+        club_head = is_club_head(username)
+        social_media_manager = is_social_media_manager(username)
+        club_member = is_club_member(username)
+
+        # Check which clubs the user is in
+        club_members = ClubMember.objects.filter(user=user)
+        club_names = [club.user.username for club in club_members]
 
         # Filter posts by the user's branch
-        post = Post.objects.filter(user=user)
+        posts = Post.objects.filter(user=user)
 
-        # sort wrt to most recent
-        post = post.order_by('-created_at')
+        # Sort posts by the most recent
+        posts = posts.order_by('-created_at')
 
-        resource = Resource.objects.filter(user=user)
-        resource = resource.order_by('-uploaded_at')
+        resources = Resource.objects.filter(user=user)
+        resources = resources.order_by('-uploaded_at')
 
-        
-        context ={
-            'user':user,
-            'student':student,
-            'mentor':mentor,
-            'club_head':club_head,
-            'social_media_manager':social_media_manager,
-            'club_member':club_member,
-            'clubs':club,
-            'post':post,
-            'resources':resource,
-
+        context = {
+            'user': user,
+            'student': student,
+            'mentor': mentor,
+            'club_head': club_head,
+            'social_media_manager': social_media_manager,
+            'club_member': club_member,
+            'clubs': club_names,
+            'post': posts,
+            'resources': resources,
         }
 
-        return render(request, 'account/profile.html',context)
+        return render(request, 'account/profile.html', context)
     else:
-        messages.error(request,"Please sign in first")
+        messages.error(request, "User profile not found.")
         return redirect('/account/login')
+
 
 def profile_user(request,username):
     who=request.user.__str__()
@@ -366,13 +425,12 @@ def mentor_registration(request):
             
             user=User.objects.get(username=username)
             student = Student.objects.get(user=user)
-            if (Mentor.objects.filter(username=username).exists()):
-                mentor=Mentor.objects.get(username=username)
+            if (Mentor.objects.filter(student=student).exists()):
+                mentor=Mentor.objects.get(student=student)
             else:
                 mentor = Mentor()
             
             mentor.student=student
-            mentor.username=username
             mentor.approved=0
             mentor.resume = resume
             mentor.description = request.POST.get("description")
@@ -394,8 +452,10 @@ def mentor_registration(request):
             return redirect('/account/mentor_registration')
         
     context={}
-    if Mentor.objects.filter(username=username).exists():
-        mentor=Mentor.objects.get(username=username)
+    user=User.objects.get(username=username)
+    student = Student.objects.get(user=user)
+    if Mentor.objects.filter(student=student).exists():
+        mentor=Mentor.objects.get(student=student)
         can_apply_again(mentor)
         context['mentor']=mentor
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request

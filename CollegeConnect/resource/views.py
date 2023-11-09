@@ -14,6 +14,25 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+from django.db.models import Subquery, OuterRef
+def res_try(request):
+    resources_with_branches = Resource.objects.annotate(
+        branches=Subquery(Branch.objects.filter(resource=OuterRef('pk')).values('branch_name')[:1])
+    )
+
+    for resource in resources_with_branches:
+        print(f"Resource Title: {resource.title}")
+        
+        # Displaying branches
+        branches = resource.branches
+        print(f"Branches: {branches}")
+        
+        print("\n")
+    context={'resources':resources_with_branches}
+    return render(request, 'resource/resource.html',context)
+        
+    
+
 
 login_required(login_url='/account/login')
 def resource(request):
@@ -27,6 +46,7 @@ def resource(request):
     context={'resources':resource}
     return render(request, 'resource/resource.html',context)
 
+login_required(login_url='/account/login')
 def resource_by_tag(request,tag):
     username=request.user.__str__()
     # get tag
@@ -74,6 +94,7 @@ def upload_resource(request):
         form = ResourceForm()
     return render(request, 'resource/upload_resource.html', {'form': form,"name":"Upload Resources"})
 
+login_required(login_url='/account/login')
 def edit_resource(request,id=None):
     username=request.user.__str__()
     # get resource
@@ -131,7 +152,7 @@ def edit_resource(request,id=None):
         form = ResourceForm(instance=resource)
     return render(request, 'resource/upload_resource.html', {'form': form,"name":"Edit Resources"})
 
-
+login_required(login_url='/account/login')
 def delete_resource(request,id=None):
     username=request.user.__str__()
     # get resource
@@ -146,7 +167,7 @@ def delete_resource(request,id=None):
         messages.error(request, "You are not authorized to delete this resource.")
         return redirect('/resource')
     
-
+login_required(login_url='/account/login')
 def download_resource(request,id):
     username=request.user.__str__()
     resource = Resource.objects.get(id=id)
