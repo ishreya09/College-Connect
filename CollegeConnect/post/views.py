@@ -9,8 +9,25 @@ import re
 from taggit.models import Tag
 
 from django.http import JsonResponse
+from django.db.models import Subquery, OuterRef, Avg, Count
 
 # Create your views here.
+
+# nested query + aggregate function
+@login_required(login_url='/account/login')
+def feed_top_comments(request, slug=None):
+    username = request.user
+
+    average_comments = Post.objects.annotate(num_comments=Count('postcomment')).aggregate(Avg('num_comments'))['num_comments__avg']
+    print(average_comments)
+    posts_with_more_comments = Post.objects.annotate(num_comments=Count('postcomment')).filter(num_comments__gt=average_comments)
+
+    context = {
+        'post': posts_with_more_comments,
+        'name': 'Top Posts',
+    }
+    return render(request, 'post/feed.html', context)
+
 def create_slug(username,title):
     # remove all special character except space
     slug = re.sub(r'[^a-zA-Z0-9\s]', '', title)
