@@ -21,9 +21,18 @@ def feed_top_comments(request, slug=None):
     average_comments = Post.objects.annotate(num_comments=Count('postcomment')).aggregate(Avg('num_comments'))['num_comments__avg']
     print(average_comments)
     posts_with_more_comments = Post.objects.annotate(num_comments=Count('postcomment')).filter(num_comments__gt=average_comments)
+    posts = posts_with_more_comments.annotate(
+        comment_count=Subquery(
+            PostComment.objects.filter(post_id=OuterRef('post_id'))
+            .values('post_id')
+            .annotate(count=Count('comment_id'))
+            .values('count')[:1]
+        )
+    )
+    
 
     context = {
-        'post': posts_with_more_comments,
+        'post': posts,
         'name': 'Top Posts',
     }
     return render(request, 'post/feed.html', context)
