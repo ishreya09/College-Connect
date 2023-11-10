@@ -12,7 +12,7 @@
     <h1> {{user.first_name}} {{user.last_name}} </h1>
     <div class="row">
         <!-- User details -->
-        <div class="col" style="padding:20px;">
+        <div class="col-md-4" style="padding:20px;">
             <div class="bg-dusky mb-3 content">
 
 
@@ -150,81 +150,82 @@
 
             </div>
         </div>
-    </div>
 
-    <!-- User Posts -->
-    <div class="col">
-        <div class="row bg-dusky">
+        <!-- User Posts -->
+        <div class="col-md-8">
+            <div class="row bg-dusky">
 
-        </div>
-        <div class="row bg-dusky">
-            <h1>My Posts </h1>
-            <div class="row">
-                {% for p in post %}
-                <!-- repeatable card -->
-                <div class="card">
-                    <a class="feed-link" class="text-light" style="text-decoration:none;color:burlywood"
-                        href="/post/{{p.slug}}">
+            </div>
+            <div class="row bg-dusky">
+                <h1>My Posts </h1>
+                <div class="row">
+                    {% for p in post %}
+                    <!-- repeatable card -->
+                    <div class="card">
+                        <a class="feed-link" class="text-light" style="text-decoration:none;color:burlywood"
+                            href="/post/{{p.slug}}">
 
-                        <div class="row text-light container">
-                            <div class="col-md-10">
-                                <h1>{{p.title}}</h1>
-                            </div>
-                            <div class="col-md-2">
-                                <h3>{{p.user}}</h3>
-                                <p class="text-medium text-muted">{{p.created_at}}</p>
-                                <span>Tags: </span>
-                                {% for t in p.tags.all %}
-                                <span class="text-medium text-muted">
-                                    {{t.name}},
-                                </span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </a>
-
-                    <div class="post-content">
-                        {{p.content | safe}}
-                    </div>
-
-                    <div class="text-center" style="padding:10px">
-                        <a href="/post/{{p.slug}}" class="bg-charcoal-black">
-                            Read More
-                        </a><br>
-                        {% if p.user == user %}
-                        <a href="/post/edit_post/{{p.slug}}">Edit Post</a>
-                        {% endif %}
-                    </div>
-
-                    <form class="text-center comment-card" method="post" action="/post/add-comment/{{p.slug}}">
-                        {% csrf_token %}
-
-                        <div class="row">
-
-                            <div class="col-md-10">
-
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="comment" name="comment"
-                                        placeholder="Add your comment here ..." />
+                            <div class="row text-light container">
+                                <div class="col-md-10">
+                                    <h1>{{p.title}}</h1>
+                                </div>
+                                <div class="col-md-2">
+                                    <h3>{{p.user}}</h3>
+                                    <p class="text-medium text-muted">{{p.created_at}}</p>
+                                    <span>Tags: </span>
+                                    {% for t in p.tags.all %}
+                                    <span class="text-medium text-muted">
+                                        {{t.name}},
+                                    </span>
+                                    {% endfor %}
                                 </div>
                             </div>
+                        </a>
 
-                            <div class="col-md-2">
-                                <button type="submit" style="width:90%;padding:20px;margin:25px;border-radius:20px"
-                                    class="btn btn-success">Comment</button>
-                            </div>
-
+                        <div class="post-content">
+                            {{p.content | safe}}
                         </div>
 
-                    </form>
+                        <div class="text-center" style="padding:10px">
+                            <a href="/post/{{p.slug}}" class="bg-charcoal-black">
+                                Read More
+                            </a><br>
+                            {% if p.user == user %}
+                            <a href="/post/edit_post/{{p.slug}}">Edit Post</a>
+                            {% endif %}
+                        </div>
 
+                        <form class="text-center comment-card" method="post" action="/post/add-comment/{{p.slug}}">
+                            {% csrf_token %}
+
+                            <div class="row">
+
+                                <div class="col-md-10">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="comment" name="comment"
+                                            placeholder="Add your comment here ..." />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="submit" style="width:90%;padding:20px;margin:25px;border-radius:20px"
+                                        class="btn btn-success">Comment</button>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+
             </div>
 
         </div>
-
     </div>
+
     <div class="row bg-dusky">
         <h1>My Resources </h1>
         {% for resource in resources %}
