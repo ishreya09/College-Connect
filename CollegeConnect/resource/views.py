@@ -12,26 +12,7 @@ from taggit.models import Tag
 
 from django.http import HttpResponse
 
-# Create your views here.
-
-from django.db.models import Subquery, OuterRef
-def res_try(request):
-    resources_with_branches = Resource.objects.annotate(
-        branches=Subquery(Branch.objects.filter(resource=OuterRef('pk')).values('branch_name')[:1])
-    )
-
-    for resource in resources_with_branches:
-        print(f"Resource Title: {resource.title}")
-        
-        # Displaying branches
-        branches = resource.branches
-        print(f"Branches: {branches}")
-        
-        print("\n")
-    context={'resources':resources_with_branches}
-    return render(request, 'resource/resource.html',context)
-        
-    
+# Create your views here.    
 
 
 login_required(login_url='/account/login')
@@ -49,15 +30,19 @@ def resource(request):
 login_required(login_url='/account/login')
 def resource_by_tag(request,tag):
     username=request.user.__str__()
-    # get tag
-    tag = Tag.objects.get(slug=tag)
-    # get resources
-    resource = Resource.objects.filter(tags__name__in=[tag])
-    # sort wrt to most recent
-    resource = resource.order_by('-uploaded_at')
-    context={'resources':resource}
+    try:
+        # get tag
+        tag = Tag.objects.get(slug=tag)
+        # get resources
+        resource = Resource.objects.filter(tags__name__in=[tag])
+        # sort wrt to most recent
+        resource = resource.order_by('-uploaded_at')
+        context={'resources':resource}
 
-    return render(request, 'resource/resource.html',context)
+        return render(request, 'resource/resource.html',context)
+    except:
+        messages.error(request, "No resources found for this tag.")
+        return redirect('/error404')
 
 login_required(login_url='/account/login')
 def upload_resource(request):

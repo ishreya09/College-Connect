@@ -40,28 +40,54 @@ def create_slug(username,title):
 @login_required(login_url='/account/login')
 def feed(request):
     username=request.user.__str__()
-    print(request.user.student.branch)
+    # print(request.user.student.branch)
     user_branch = request.user.student.branch 
     # Filter posts by the user's branch
     post = Post.objects.filter(branch=user_branch)
 
     # sort wrt to most recent
     post = post.order_by('-created_at')
+    
+    # Annotate each post with its comment count using a subquery
+    posts = post.annotate(
+        comment_count=Subquery(
+            PostComment.objects.filter(post_id=OuterRef('post_id'))
+            .values('post_id')
+            .annotate(count=Count('comment_id'))
+            .values('count')[:1]
+        )
+    )
+        
 
-    context={'post':post,"name":"My Feed"}
+    context={'post':posts,"name":"My Feed"}
     return render(request, 'post/feed.html',context)
 
 @login_required(login_url='/account/login')
 def tag_post(request,slug):
     username=request.user.__str__()
-    # get tag
-    tag = Tag.objects.get(slug=slug)
-    # get posts
-    post = Post.objects.filter(tags__name__in=[tag])
-    # sort wrt to most recent
-    post = post.order_by('-created_at')
-    context={'post':post,"name":"Tag: "+tag.name}
-    return render(request, 'post/feed.html',context)
+    try:
+        # get tag
+        tag = Tag.objects.get(slug=slug)
+        # get posts
+        post = Post.objects.filter(tags__name__in=[tag])
+        # sort wrt to most recent
+        post = post.order_by('-created_at')
+        
+        # Annotate each post with its comment count using a subquery
+        posts = post.annotate(
+            comment_count=Subquery(
+                PostComment.objects.filter(post_id=OuterRef('post_id'))
+                .values('post_id')
+                .annotate(count=Count('comment_id'))
+                .values('count')[:1]
+            )
+        )
+
+        context={'post':posts,"name":"Tag: "+tag.name}
+        return render(request, 'post/feed.html',context)
+    except:
+        messages.error(request, "No posts found for this tag.")
+        return redirect("/error404")
 
 @login_required(login_url='/account/login')
 def make_post(request):
@@ -109,14 +135,17 @@ def make_post(request):
 @login_required(login_url='/account/login')
 def post_detail(request,slug=None):
     username=request.user.__str__()
-        
-    post=Post.objects.get(slug=slug)   
-    # get comments
-    comments = PostComment.objects.filter(post=post) 
-    comments = comments.order_by('-created_at')
+    try:    
+        post=Post.objects.get(slug=slug)   
+        # get comments
+        comments = PostComment.objects.filter(post=post) 
+        comments = comments.order_by('-created_at')
 
-    context={'post':post,'comments':comments}
-    return render(request,'post/post_detail.html',context)
+        context={'post':post,'comments':comments}
+        return render(request,'post/post_detail.html',context)
+    except:
+        messages.error(request, "No post found")
+        return redirect("/error404")
 
 
 

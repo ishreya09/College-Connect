@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-2">
                         <h3>{{p.user}}</h3>
-                        <p class="text-medium text-muted">{{p.created_at}}</p>
+                        <p class="text-medium text-muted">{{p.created_at}}<br>Comment Count: {{ p.comment_count }}</p>
                         <span>Tags: </span>
                         {% for t in p.tags.all %}
                             <span class="text-medium text-muted">
@@ -127,7 +127,9 @@
 
         var newContent = ''
         for (var j = 0; j < 100; j++) {
-            newContent += words[j] + ' '
+            if(words[j]!=undefined){
+                newContent += words[j] + ' '
+            }
         }
         postContents[i].innerHTML = newContent + '...'
     }
