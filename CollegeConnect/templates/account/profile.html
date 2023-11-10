@@ -395,7 +395,9 @@
 
         var newContent = ''
         for (var j = 0; j < 100; j++) {
-            newContent += words[j] + ' '
+            if (words[j] != undefined){
+                newContent += words[j] + ' '
+            }
         }
         postContents[i].innerHTML = newContent + '...'
     }

@@ -230,7 +230,7 @@ def profile(request):
 
         # Check which clubs the user is in
         club_members = ClubMember.objects.filter(user=user)
-        club_names = [club.user.username for club in club_members]
+        club_names = [club.club.club_name for club in club_members]
 
         # Filter posts by the user's branch
         posts = Post.objects.filter(user=user)
@@ -286,7 +286,7 @@ def profile_user(request,username):
 
         # Check which clubs the user is in
         club_members = ClubMember.objects.filter(user=user)
-        club_names = [club.user.username for club in club_members]
+        club_names = [club.club.club_name for club in club_members]
 
         # Filter posts by the user's branch
         posts = Post.objects.filter(user=user)
