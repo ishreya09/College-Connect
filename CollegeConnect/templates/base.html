@@ -87,8 +87,9 @@
                     {% endif %}
 
                     <!-- Search form -->
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
+                    <form class="d-flex" method="post" action="/search">
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="text" name="q" id="q" placeholder="Search" aria-label="Search">
                         <button style="border-radius:20px" class="btn btn-success text-light" type="submit">
                             <i>
                                 <img src="{% static 'img\icons8-search-96.png' %}" width="30" alt="search" />

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "branch.apps.BranchConfig",
     "resource.apps.ResourceConfig",
     "announcement.apps.AnnouncementConfig",
+    # "search.apps.SearchConfig"
 
     # helper apps
     'taggit',

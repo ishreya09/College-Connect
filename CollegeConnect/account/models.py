@@ -13,6 +13,29 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import auth
 from branch.models import Department,Branch
 from taggit.managers import TaggableManager
+
+from django.db.models import Q
+
+class StudentQuerySet(models.QuerySet):
+    def search(self, query=None):
+        qs = self
+        if query is not None:
+            or_lookup = (
+                Q(student_id__icontains=query) | 
+                Q(bio__icontains=query) |
+                Q(user__username__icontains=query) |
+                Q(user__email__icontains=query) |
+                Q(college_email__icontains=query) |
+                Q(whatsapp_number__icontains=query) |
+                Q(year_of_passing_out__icontains=query)
+            )
+            qs = qs.filter(or_lookup).distinct().only(
+                'student_id', 'bio', 'user__username', 'college_email',
+                'whatsapp_number', 'whatsapp_link', 'email_confirmed',
+                'is_mentor', 'show_number', 'year_of_passing_out'
+            )  # Add more fields as needed
+        return qs
+
 # Create your models here.
 
 class Student(models.Model):
@@ -28,8 +51,12 @@ class Student(models.Model):
     is_mentor= models.BooleanField(default=False)
     show_number=models.BooleanField(default=False) # choice for users to show their chat option
     year_of_passing_out= models.IntegerField(null=True,blank=True)
+    objects = StudentQuerySet.as_manager()
+
     def __str__(self):
         return self.user.username
+    def get_model_name(self):
+        return 'Student'
 
     
 
