@@ -190,9 +190,6 @@
                             <a href="/post/{{p.slug}}" class="bg-charcoal-black">
                                 Read More
                             </a><br>
-                            {% if p.user == user %}
-                            <a href="/post/edit_post/{{p.slug}}">Edit Post</a>
-                            {% endif %}
                         </div>
 
                         <form class="text-center comment-card" method="post" action="/post/add-comment/{{p.slug}}">
@@ -233,10 +230,6 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">{{ resource.title }}</h2>
-                {% if resource.user == user %}
-                <a href="/resource/edit/{{resource.id}}">Edit Resource</a><br>
-                <a href="/resource/delete/{{resource.id}}">Delete Resource</a><br>
-                {% endif %}
                 <span class="text-muted">
                     Uploaded on: {{ resource.uploaded_at }} |
                     Uploaded by : <a href="/account/profile/{{resource.user.username}}">{{resource.user.username}}</a> |

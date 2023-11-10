@@ -30,6 +30,9 @@ def feed_top_comments(request, slug=None):
         )
     )
     
+    posts = posts.order_by('-created_at')
+    
+    
 
     context = {
         'post': posts,
