@@ -202,6 +202,7 @@ def logout(request):
 
 
 # with joins
+@login_required(login_url='/account/login')
 def profile(request):
     username = request.user
     if username.is_anonymous:
@@ -258,7 +259,7 @@ def profile(request):
         messages.error(request, "User profile not found.")
         return redirect('/account/login')
 
-
+@login_required(login_url='/account/login')
 def profile_user(request,username):
     who=request.user.__str__()
     if(who=="AnonymousUser"):
@@ -318,6 +319,7 @@ def change_password(request):
     context ={}
     return render(request, 'account/change_password.html',context)
 
+@login_required(login_url='/account/login')
 def edit_profile(request):
     username= request.user
     if(username.__str__() != 'AnonymousUser'):
@@ -438,7 +440,7 @@ def can_apply_again(mentor):
         mentor.last_application_date = None
         mentor.save()
 
-
+@login_required(login_url='/account/login')
 def mentor_registration(request):
     username=request.user.__str__()
     if(username=="AnonymousUser"):
@@ -490,6 +492,7 @@ def mentor_registration(request):
         context['mentor']=mentor
     return render(request, 'account/mentor_registration.html',context)  # Render the form again if it's a GET request
 
+@login_required(login_url='/account/login')
 def show_mentor(request):
     # get all mentors of branch
     username= request.user.__str__()
@@ -503,6 +506,7 @@ def show_mentor(request):
     context={'mentors':mentors}
     return render(request, 'account/show_mentor.html',context)
 
+@login_required(login_url='/account/login')
 def show_mentors_by_domain(request,domain):
     # get all mentors of branch
     username= request.user.__str__()
