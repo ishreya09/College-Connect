@@ -17,7 +17,7 @@ class ResourceAdmin(admin.ModelAdmin):
     # display these fields in admin panel
     list_display = ('title','user','uploaded_at')
     # add search bar
-    search_fields = ('title','author','uploaded_at')
+    search_fields = ('title','user','uploaded_at')
     # add filter
     list_filter = (
         # 'uploaded_at',

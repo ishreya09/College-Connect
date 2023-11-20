@@ -28,7 +28,9 @@ class PostCommentAdmin(admin.ModelAdmin):
     # add search bar
     search_fields = ('user','post','comment')
     # add filter
-    list_filter = ('created_at',)
+    list_filter = (
+        ('created_at', DateRangeQuickSelectListFilterBuilder()), 
+        )
 
 admin.site.register(Post,PostAdmin)
 admin.site.register(PostComment,PostCommentAdmin)
