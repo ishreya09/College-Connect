@@ -21,9 +21,9 @@ class ResourceAdmin(admin.ModelAdmin):
     # add filter
     list_filter = (
         # 'uploaded_at',
+        ("uploaded_at", DateRangeQuickSelectListFilterBuilder()), 
         'branch',
         'user',
-        ("uploaded_at", DateRangeQuickSelectListFilterBuilder()), 
     )
 
 
